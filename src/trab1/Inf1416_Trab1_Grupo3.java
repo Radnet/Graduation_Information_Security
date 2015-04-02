@@ -40,6 +40,7 @@ public class Inf1416_Trab1_Grupo3
 		
 		System.out.println( "DigitalSignature (hex):" );
 	    System.out.println( GetHexadecimal(digitalSignature) );
+	    
 		System.out.println( "\n################################################" );
 	    
 	    System.out.println("\n\n\n###########VERIFY DIGITAL SIGNATURE###########" );
@@ -47,6 +48,7 @@ public class Inf1416_Trab1_Grupo3
 	    boolean result = VerifyDigitalSignature(plainText, digitalSignature, key.getPrivate());
 	    
 	    System.out.println( "\n################################################\n\n" );
+	    
 	    if(result)
 	    {
 	    	System.out.println("\nGreat, Plain Text integrity is OK !" );
