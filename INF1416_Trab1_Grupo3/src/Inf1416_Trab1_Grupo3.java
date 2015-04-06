@@ -44,7 +44,7 @@ public class Inf1416_Trab1_Grupo3
 		System.out.println( "\n################################################" );
 	    
 	    System.out.println("\n\n\n###########VERIFY DIGITAL SIGNATURE###########" );
-	    	    
+
 	    boolean result = VerifyDigitalSignature(plainText, digitalSignature, key.getPublic());
 	    
 	    System.out.println( "\n################################################\n\n" );
@@ -64,7 +64,7 @@ public class Inf1416_Trab1_Grupo3
 	 {
 		 //############ DIGEST ##########################################
 	    
-		 System.out.println( "\nGenerating Digest Received for Plain Text" );
+		 System.out.println( "\nGenerating Digest for Plain Text" );
 	    
 		 // get a message digest object using the MD5 algorithm
 		 MessageDigest messageDigest = MessageDigest.getInstance("MD5");
