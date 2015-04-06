@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +32,33 @@ public class DigestCalculator {
 			Files.add(file);
 		}
 		
-		// print console info
+		// Get Name from path
+		for (Archive singleFile : Files)
+		{
+			singleFile.Name = singleFile.Path.substring(singleFile.Path.lastIndexOf("\\") + 1, singleFile.Path.length());
+		}
+		
+		// Print console info
 		System.out.println("\nDigest Calculation Type: " + DigestCalculationType);
-		System.out.println("\n" + Files.size() + " Files Paths found.");
+		System.out.println("\n" + Files.size() + " File(s) Path(s) found.");
 		System.out.println("\nDigest List Path: " + DigestListFilePath);
+		
+		// Read Digest List File
+		try (BufferedReader br = new BufferedReader(new FileReader(DigestListFilePath)))
+		{
+ 
+			String sCurrentLine;
+ 
+			while ((sCurrentLine = br.readLine()) != null) 
+			{
+				System.out.println(sCurrentLine);
+			}
+ 
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		} 
 		
 	}
 	
