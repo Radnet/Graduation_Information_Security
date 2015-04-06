@@ -87,7 +87,7 @@ public class Inf1416_Trab1_Grupo3
 	    
 		 // Decrypt using private key
 		 cipher.init(Cipher.DECRYPT_MODE, pubKey);
-		 System.out.println( "\nStart DS decryption with private key" );
+		 System.out.println( "\nStart DS decryption with public key" );
 		 byte[] originalDigest = cipher.doFinal(digitalSignature);
 		 System.out.println( "Finish DS decryption." );
 		 System.out.println( "Original Digest(hex): " );
@@ -136,7 +136,7 @@ public class Inf1416_Trab1_Grupo3
 	    
 	    // encrypt using public key
 	    cipher.init(Cipher.ENCRYPT_MODE, privKey);
-	    System.out.println( "\nStart digest encryption with public key" );
+	    System.out.println( "\nStart digest encryption with private key" );
 	    byte[] cipherText = cipher.doFinal(digest);
 	    System.out.println( "Finish digest encryption" );
 	    
