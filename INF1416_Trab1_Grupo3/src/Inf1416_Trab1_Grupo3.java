@@ -36,7 +36,7 @@ public class Inf1416_Trab1_Grupo3
 		System.out.println( "\n\n###########GENERATE DIGITAL SIGNATURE###########" );
 		
 		// Generate Digital Signature
-		byte[] digitalSignature = GenerateDigitalSignature(plainText, key.getPublic());
+		byte[] digitalSignature = GenerateDigitalSignature(plainText, key.getPrivate());
 		
 		System.out.println( "DigitalSignature (hex):" );
 	    System.out.println( GetHexadecimal(digitalSignature) );
@@ -45,7 +45,7 @@ public class Inf1416_Trab1_Grupo3
 	    
 	    System.out.println("\n\n\n###########VERIFY DIGITAL SIGNATURE###########" );
 	    	    
-	    boolean result = VerifyDigitalSignature(plainText, digitalSignature, key.getPrivate());
+	    boolean result = VerifyDigitalSignature(plainText, digitalSignature, key.getPublic());
 	    
 	    System.out.println( "\n################################################\n\n" );
 	    
@@ -60,7 +60,7 @@ public class Inf1416_Trab1_Grupo3
 
 	 }
 	 
-	 public static boolean VerifyDigitalSignature(byte[] plainText, byte[] digitalSignature, PrivateKey privateKey) throws Exception
+	 public static boolean VerifyDigitalSignature(byte[] plainText, byte[] digitalSignature, PublicKey pubKey) throws Exception
 	 {
 		 //############ DIGEST ##########################################
 	    
@@ -86,7 +86,7 @@ public class Inf1416_Trab1_Grupo3
 		 Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 	    
 		 // Decrypt using private key
-		 cipher.init(Cipher.DECRYPT_MODE, privateKey);
+		 cipher.init(Cipher.DECRYPT_MODE, pubKey);
 		 System.out.println( "\nStart DS decryption with private key" );
 		 byte[] originalDigest = cipher.doFinal(digitalSignature);
 		 System.out.println( "Finish DS decryption." );
@@ -109,7 +109,7 @@ public class Inf1416_Trab1_Grupo3
 		 
 	 }
 	 
-	 public static byte[] GenerateDigitalSignature(byte[] plainText, PublicKey pubKey) throws Exception
+	 public static byte[] GenerateDigitalSignature(byte[] plainText, PrivateKey privKey) throws Exception
 	 {
 		 //############ DIGEST ##########################################
 	    
@@ -135,7 +135,7 @@ public class Inf1416_Trab1_Grupo3
 	    Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 	    
 	    // encrypt using public key
-	    cipher.init(Cipher.ENCRYPT_MODE, pubKey);
+	    cipher.init(Cipher.ENCRYPT_MODE, privKey);
 	    System.out.println( "\nStart digest encryption with public key" );
 	    byte[] cipherText = cipher.doFinal(digest);
 	    System.out.println( "Finish digest encryption" );
