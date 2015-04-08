@@ -17,8 +17,6 @@ public class DigestCalculator {
 		// Check arguments+	
 		if(!ValidateArgs(args))
 			System.exit(1);
-		else
-			System.out.println("\nArguments OK!\n");
 		// Get DigestCalculationType and DigestListFilePath from args
 		DigestCalculationType = args[0];
 		DigestListFilePath    = args[args.length - 1];
@@ -44,6 +42,8 @@ public class DigestCalculator {
 				System.exit(1);
 			}
 		}
+		// "exit(1)" not fired? arguments are ok though!
+		System.out.println("\nArguments OK!\n");
 		
 		// Get Name from path
 		for (Archive singleFile : Files)
