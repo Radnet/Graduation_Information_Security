@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.*;
@@ -30,6 +31,18 @@ public class DigestCalculator {
 			file.Path    = args[i];
 			// add file to list
 			Files.add(file);
+		}
+		
+		// Validate archives
+		for(Archive file : Files)
+		{
+			File f = new File(file.Path);
+			// If file doesn't exists or it is a directory, alert and exit
+			if(!f.exists() || f.isDirectory())
+			{
+				System.err.println("The file \"" + file.Path + "\" does not exist.");
+				System.exit(1);
+			}
 		}
 		
 		// Get Name from path
