@@ -2,18 +2,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Path;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.print.attribute.standard.MediaSize.NA;
-
-import sun.misc.IOUtils;
 
 public class DigestCalculator {
 
@@ -48,7 +41,6 @@ public class DigestCalculator {
 						+ "\" does not exist.");
 				System.exit(1);
 			}
-			file.length = (int)f.length();
 		}
 		// "exit(1)" not fired? arguments are ok though!
 		System.out.println("\nArguments OK!\n");
