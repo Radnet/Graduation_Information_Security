@@ -5,8 +5,8 @@ public class Archive {
 	public String  Path;
 	public String  DigestType;
 	public byte [] CalculatedDigest;
-	public byte [] FirdtOriginalDigest;
-	public byte [] SecondtOriginalDigest;
+	public byte [] FirstOriginalDigest;
+	public byte [] SecondOriginalDigest;
 	
 	public String  Status;
 	

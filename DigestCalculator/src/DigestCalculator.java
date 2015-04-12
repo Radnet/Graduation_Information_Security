@@ -57,13 +57,13 @@ public class DigestCalculator {
 		System.out.println("\nDigest List Path: " + DigestListFilePath);
 		
 		// Read Digest List File
-		try (BufferedReader br = new BufferedReader(new FileReader(DigestListFilePath)))
+		try ( BufferedReader br = new BufferedReader(new FileReader(DigestListFilePath)) )
 		{
- 
 			String sCurrentLine;
  
 			while ((sCurrentLine = br.readLine()) != null) 
 			{
+				// Do something for each line readed
 				System.out.println(sCurrentLine);
 			}
  
