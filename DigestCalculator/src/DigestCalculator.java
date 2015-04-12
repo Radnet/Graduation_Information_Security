@@ -56,7 +56,17 @@ public class DigestCalculator {
 		System.out.println("\n" + Files.size() + " File(s) Path(s) found.");
 		System.out.println("\nDigest List Path: " + DigestListFilePath);
 		
-		// Read Digest List File
+		
+		
+		
+		
+		// DIGEST CALCULATION FOR FILES !!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		
+		
+		
+		
+		// Read Digest List File and load info in memory
 		try ( BufferedReader br = new BufferedReader(new FileReader(DigestListFilePath)) )
 		{
 			String sCurrentLine;
@@ -72,6 +82,13 @@ public class DigestCalculator {
 		{
 			e.printStackTrace();
 		} 
+		
+		
+		
+		
+		// COMPARE CALCULATED DIGESTS WITH THOSE ONES IN THE DIGEST LIST FILE
+		// PS.: REMEMBER EVERYTHING IS IN MEMORY!!
+		
 		
 	}
 	
