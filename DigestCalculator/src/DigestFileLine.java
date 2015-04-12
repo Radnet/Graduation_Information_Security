@@ -12,5 +12,7 @@ public class DigestFileLine {
 		Name 		 = "";
 		DigestType1  = "";     
 		DigestType2  = "";
+		Digest1HEX   = "";
+		Digest2HEX   = "";
 	}
 }

@@ -186,7 +186,7 @@ public class DigestCalculator {
 					}
 					
 					// Verify digest 2
-					else
+					else if(fileLine.DigestType2.equals(DigestCalculationType))
 					{
 						// Is digest equals?
 						if(fileLine.Digest2HEX.equals(file.CalculatedDigestHEX))
