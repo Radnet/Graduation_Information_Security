@@ -70,6 +70,7 @@ public class DigestCalculator {
 		// Read Digest List File and LOAD info in memory LIST
 		try ( BufferedReader br = new BufferedReader(new FileReader(DigestListFilePath)) )
 		{
+			DigestsFileList = new ArrayList<DigestFileLine>();
 			String sCurrentLine;
 			
 			while ((sCurrentLine = br.readLine()) != null) 
@@ -85,13 +86,12 @@ public class DigestCalculator {
 				if(digestLine.length > 3)
 				{
 					newLine.DigestType2 = digestLine[3];
-					newLine.Digest2HEX = digestLine[4];
+					newLine.Digest2HEX  = digestLine[4];
 				}
 				
 				// add newLine to list
 				DigestsFileList.add(newLine);
 			}
- 
 		} 
 		catch (IOException e) 
 		{
