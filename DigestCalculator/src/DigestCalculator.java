@@ -68,6 +68,17 @@ public class DigestCalculator {
 		
 		
 		// Read Digest List File and LOAD info in memory LIST
+		LoadDigestListFile();
+		
+		
+		// COMPARE CALCULATED DIGESTS WITH THOSE ONES IN THE DIGEST LIST FILE
+		// PS.: REMEMBER EVERYTHING IS IN MEMORY!!
+		
+		
+	}
+	
+	public static void LoadDigestListFile()
+	{
 		try ( BufferedReader br = new BufferedReader(new FileReader(DigestListFilePath)) )
 		{
 			DigestsFileList = new ArrayList<DigestFileLine>();
@@ -97,14 +108,6 @@ public class DigestCalculator {
 		{
 			e.printStackTrace();
 		} 
-		
-		
-		
-		
-		// COMPARE CALCULATED DIGESTS WITH THOSE ONES IN THE DIGEST LIST FILE
-		// PS.: REMEMBER EVERYTHING IS IN MEMORY!!
-		
-		
 	}
 	
 	public static boolean ValidateArgs(String[] args)
