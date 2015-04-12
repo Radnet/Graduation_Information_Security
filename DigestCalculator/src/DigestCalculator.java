@@ -8,9 +8,10 @@ import java.util.List;
 
 public class DigestCalculator {
 	
-	public static String 		DigestCalculationType;
-	public static List<Archive> Files;
-	public static String 		DigestListFilePath;
+	public static String 		   	   DigestCalculationType;
+	public static List<Archive>        Files;
+	public static String 		       DigestListFilePath;
+	public static List<DigestFileLine> DigestsFileList;
 	
 	public static void main (String[] args) throws Exception 
 	{
@@ -66,15 +67,29 @@ public class DigestCalculator {
 		
 		
 		
-		// Read Digest List File and load info in memory
+		// Read Digest List File and LOAD info in memory LIST
 		try ( BufferedReader br = new BufferedReader(new FileReader(DigestListFilePath)) )
 		{
 			String sCurrentLine;
- 
+			
 			while ((sCurrentLine = br.readLine()) != null) 
 			{
-				// Do something for each line readed
-				System.out.println(sCurrentLine);
+				DigestFileLine newLine = new DigestFileLine();
+				// Split current line
+				String[] digestLine = sCurrentLine.split(" ");
+				newLine.Name 		= digestLine[0];
+				newLine.DigestType1 = digestLine[1];
+				newLine.Digest1HEX	= digestLine[2];
+				
+				// if there is another digest for this line
+				if(digestLine.length > 3)
+				{
+					newLine.DigestType2 = digestLine[3];
+					newLine.Digest2HEX = digestLine[4];
+				}
+				
+				// add newLine to list
+				DigestsFileList.add(newLine);
 			}
  
 		} 
