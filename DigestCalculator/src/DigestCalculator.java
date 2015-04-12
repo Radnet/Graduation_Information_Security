@@ -77,7 +77,63 @@ public class DigestCalculator {
 		// PS.: REMEMBER EVERYTHING IS IN MEMORY!!
 		CompareAll();
 		
+		// Print Files Status
+		PrintStatus();
+		
+		// Add all NOT FOUND Archives to DigestsFileList
+		AddNotFounds();
+		
 		// Re-Write Digest List file
+		ReWriteDigestListFile();
+		
+	}
+	
+	public static void ReWriteDigestListFile()
+	{
+		
+	}
+	
+	public static void AddNotFounds()
+	{
+		for(Archive file : Files)
+		{
+			if(file.Status.equals("NOT FOUND"))
+			{
+				boolean addedFlag = false;
+				
+				// First look for the file among the digest list, it's possible it's inside already
+				for(DigestFileLine fileLine : DigestsFileList)
+				{
+					if(fileLine.Name.equals(file.Name))
+					{
+						fileLine.DigestType2 = DigestCalculationType;
+						fileLine.Digest2HEX  = file.CalculatedDigestHEX;
+						addedFlag = true;
+					}
+				}
+				
+				// If file was not found among the digest list
+				if(!addedFlag)
+				{
+					DigestFileLine newLine = new DigestFileLine();
+					newLine.Name 		   = file.Name;
+					newLine.DigestType1    = DigestCalculationType;
+					newLine.Digest1HEX 	   = file.CalculatedDigestHEX;
+					
+					// add to list
+					DigestsFileList.add(newLine);
+				}
+			}
+		}
+	}
+	
+	public static void PrintStatus()
+	{
+		for(Archive file : Files)
+		{
+			String consoleOutPut = file.Name + " " + file.DigestType  + " " + file.CalculatedDigestHEX + " " + file.Status;
+			System.out.println(consoleOutPut);
+		}
 	}
 	
 	public static void CompareAll()
