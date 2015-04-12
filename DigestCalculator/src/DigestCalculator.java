@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -23,27 +25,8 @@ public class DigestCalculator {
 		DigestCalculationType = args[0];
 		DigestListFilePath = args[args.length - 1];
 
-		// Get Archive list
-		Files = new ArrayList<Archive>();
-		for (int i = 1; i < args.length - 1; i++) {
-			Archive file = new Archive();
-			file.Path = args[i];
-			// add file to list
-			Files.add(file);
-		}
-
-		// Validate archives
-		for (Archive file : Files) {
-			File f = new File(file.Path);
-			// If file doesn't exists or it is a directory, alert and exit
-			if (!f.exists() || f.isDirectory()) {
-				System.err.println("The file \"" + file.Path
-						+ "\" does not exist.");
-				System.exit(1);
-			}
-		}
-		// "exit(1)" not fired? arguments are ok though!
-		System.out.println("\nArguments OK!\n");
+		// Get Archives and validate all
+		GetArchives(args);
 
 		// Get Name from path
 		for (Archive singleFile : Files) {
@@ -78,6 +61,30 @@ public class DigestCalculator {
 		ReWriteDigestListFile();
 
 	}
+	
+	public static void GetArchives(String[] args)
+	{
+		// Get Archive list
+		Files = new ArrayList<Archive>();
+		for (int i = 1; i < args.length - 1; i++) {
+			Archive file = new Archive();
+			file.Path = args[i];
+			// add file to list
+			Files.add(file);
+		}
+
+		// Validate archives
+		for (Archive file : Files) {
+			File f = new File(file.Path);
+			// If file doesn't exists or it is a directory, alert and exit
+			if (!f.exists() || f.isDirectory()) {
+				System.err.println("The file \"" + file.Path + "\" does not exist.");
+				System.exit(1);
+			}
+		}
+		// "exit(1)" not fired? arguments are ok though!
+		System.out.println("\nArguments OK!\n");
+	}
 
 	public static void CalculateFilesDigest() throws Exception
 	{
@@ -101,8 +108,44 @@ public class DigestCalculator {
 		}
 	}
 
-	public static void ReWriteDigestListFile() {
-
+	public static void ReWriteDigestListFile()
+	{
+		try {
+			File file = new File(DigestListFilePath);
+ 
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			// Append false, overwrite
+			FileWriter fw     = new FileWriter(file.getAbsoluteFile(), false);
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			// Write each line
+			for(DigestFileLine line : DigestsFileList)
+			{
+				// First Digest
+				String content = line.Name + " " + line.DigestType1  + " " + line.Digest1HEX;
+				
+				// If line contains a second Digest
+				if(!line.DigestType2.equals(""))
+				{
+					content = content  + " " + line.DigestType2  + " " + line.Digest2HEX;
+				}
+				
+				// Add end of line
+				content = content + "\n";
+				
+				// Write it!
+				bw.write(content);
+			}
+			
+			bw.close();
+  
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void AddNotFounds() {
