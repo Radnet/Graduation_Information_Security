@@ -189,7 +189,7 @@ public class DigestCalculator {
 		for (Archive file : Files) {
 			// Verify colision among the other files
 			for (Archive fileAux : Files) {
-				if (fileAux.CalculatedDigestHEX.equals(file.CalculatedDigestHEX)) {
+				if (!fileAux.Name.endsWith(file.Name) && fileAux.CalculatedDigestHEX.equals(file.CalculatedDigestHEX)) {
 					file.Status = "COLISION";
 					break;
 				}
