@@ -6,6 +6,8 @@ import java.security.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.attribute.standard.MediaSize.NA;
+
 public class DigestCalculator {
 	
 	public static String 		   	   DigestCalculationType;
@@ -73,8 +75,78 @@ public class DigestCalculator {
 		
 		// COMPARE CALCULATED DIGESTS WITH THOSE ONES IN THE DIGEST LIST FILE
 		// PS.: REMEMBER EVERYTHING IS IN MEMORY!!
+		CompareAll();
 		
-		
+		// Re-Write Digest List file
+	}
+	
+	public static void CompareAll()
+	{
+		for(Archive file : Files)
+		{
+			// Verify colision among the other files
+			for(Archive fileAux : Files)
+			{
+				if(fileAux.CalculatedDigestHEX.equals(file.CalculatedDigestHEX))
+				{
+					file.Status = "COLISION";
+					break;
+				}
+			}
+			
+			// If COLISION was detected, continue to next file
+			if(file.Status.equals("COLISION"))
+				continue;
+			
+			// Verify the digest list file
+			for(DigestFileLine fileLine : DigestsFileList)
+			{
+				// If it is not the same file, verify possible COLISION
+				if( !fileLine.Name.equals(file.Name) )
+				{
+					// Verify digest 1
+					if(fileLine.DigestType1.equals(DigestCalculationType) && fileLine.Digest1HEX.equals(file.CalculatedDigestHEX))
+					{
+						file.Status = "COLISION";
+						break;
+					}
+					// Verify digest 2
+					else if(fileLine.DigestType2.equals(DigestCalculationType) && fileLine.Digest2HEX.equals(file.CalculatedDigestHEX))
+					{
+						file.Status = "COLISION";
+						break;
+					}
+				}
+				else
+				{
+					// Verify digest 1
+					if( fileLine.DigestType1.equals(DigestCalculationType) )
+					{
+						// Is digest equals?
+						if(fileLine.Digest1HEX.equals(file.CalculatedDigestHEX))
+							file.Status = "OK";
+						else
+							file.Status = "NOT OK";
+					}
+					
+					// Verify digest 2
+					else
+					{
+						// Is digest equals?
+						if(fileLine.Digest2HEX.equals(file.CalculatedDigestHEX))
+							file.Status = "OK";
+						else
+							file.Status = "NOT OK";
+					}
+				}
+			}
+			
+			// Verify NOT FOUND
+			if(file.Status.equals(""))
+			{
+				file.Status = "NOT FOUND";
+			}
+		}
 	}
 	
 	public static void LoadDigestListFile()

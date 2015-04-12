@@ -14,5 +14,6 @@ public class Archive {
 		Name 		= "";
 		Path 		= "";     
 		DigestType  = "";
+		Status		= "";
 	}
 }
