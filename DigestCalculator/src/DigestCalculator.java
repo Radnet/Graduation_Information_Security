@@ -36,10 +36,10 @@ public class DigestCalculator {
 		}
 
 		// Print console info
-		System.out.println("\nDigest Calculation Type: "
+		System.out.println("Digest Calculation Type: "
 				+ DigestCalculationType);
-		System.out.println("\n" + Files.size() + " File(s) Path(s) found.");
-		System.out.println("\nDigest List Path: " + DigestListFilePath);
+		System.out.println(Files.size() + " File(s) Path(s) found.");
+		System.out.println("Digest List Path: " + DigestListFilePath + "\n");
 
 		// Calculating the digest for all files
 		CalculateFilesDigest();
@@ -178,11 +178,13 @@ public class DigestCalculator {
 	}
 
 	public static void PrintStatus() {
+		System.out.println("#################STATUS###############################\n");
 		for (Archive file : Files) {
 			String consoleOutPut = file.Name + " " + DigestCalculationType + " "
 					+ file.CalculatedDigestHEX + " " + file.Status;
 			System.out.println(consoleOutPut);
 		}
+		System.out.println("\n######################################################");
 	}
 
 	public static void CompareAll() {
@@ -251,21 +253,23 @@ public class DigestCalculator {
 			String sCurrentLine;
 
 			while ((sCurrentLine = br.readLine()) != null) {
-				DigestFileLine newLine = new DigestFileLine();
-				// Split current line
-				String[] digestLine = sCurrentLine.split(" ");
-				newLine.Name = digestLine[0];
-				newLine.DigestType1 = digestLine[1];
-				newLine.Digest1HEX = digestLine[2];
-
-				// if there is another digest for this line
-				if (digestLine.length > 3) {
-					newLine.DigestType2 = digestLine[3];
-					newLine.Digest2HEX = digestLine[4];
+				if(!sCurrentLine.equals("")){
+					DigestFileLine newLine = new DigestFileLine();
+					// Split current line
+					String[] digestLine = sCurrentLine.split(" ");
+					newLine.Name = digestLine[0];
+					newLine.DigestType1 = digestLine[1];
+					newLine.Digest1HEX = digestLine[2];
+	
+					// if there is another digest for this line
+					if (digestLine.length > 3) {
+						newLine.DigestType2 = digestLine[3];
+						newLine.Digest2HEX = digestLine[4];
+					}
+	
+					// add newLine to list
+					DigestsFileList.add(newLine);
 				}
-
-				// add newLine to list
-				DigestsFileList.add(newLine);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
