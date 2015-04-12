@@ -135,7 +135,7 @@ public class DigestCalculator {
 				}
 				
 				// Add end of line
-				content = content + "\n";
+				content = content + "\r\n";
 				
 				// Write it!
 				bw.write(content);
