@@ -3,7 +3,6 @@ public class Archive {
 	
 	public String  Name;
 	public String  Path;
-	public String  DigestType;
 	public byte [] CalculatedDigest;
 	public String  CalculatedDigestHEX;
 	
@@ -13,7 +12,6 @@ public class Archive {
 	{
 		Name 		= "";
 		Path 		= "";     
-		DigestType  = "";
 		Status		= "";
 	}
 }
