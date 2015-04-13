@@ -35,12 +35,6 @@ public class DigestCalculator {
 					singleFile.Path.length());
 		}
 
-		// Print console info
-		System.out.println("Digest Calculation Type: "
-				+ DigestCalculationType);
-		System.out.println(Files.size() + " File(s) Path(s) found.");
-		System.out.println("Digest List Path: " + DigestListFilePath + "\n");
-
 		// Calculating the digest for all files
 		CalculateFilesDigest();
 		
@@ -83,7 +77,6 @@ public class DigestCalculator {
 			}
 		}
 		// "exit(1)" not fired? arguments are ok though!
-		System.out.println("\nArguments OK!\n");
 	}
 
 	public static void CalculateFilesDigest() throws Exception
@@ -178,7 +171,7 @@ public class DigestCalculator {
 	}
 
 	public static void PrintStatus() {
-		System.out.println("#################STATUS###############################\n");
+		System.out.println("\n###############  STATUS  #############################\n");
 		for (Archive file : Files) {
 			String consoleOutPut = file.Name + " " + DigestCalculationType + " "
 					+ file.CalculatedDigestHEX + " " + file.Status;
