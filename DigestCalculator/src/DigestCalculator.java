@@ -76,6 +76,14 @@ public class DigestCalculator {
 				System.exit(1);
 			}
 		}
+		
+		// Validate Digest List Archive
+		File f = new File(DigestListFilePath);
+		// If file doesn't exists or it is a directory, alert and exit
+		if (!f.exists() || f.isDirectory()) {
+			System.err.println("TheDigest List file \"" + DigestListFilePath + "\" does not exist.");
+			System.exit(1);
+		}
 		// "exit(1)" not fired? arguments are ok though!
 	}
 
