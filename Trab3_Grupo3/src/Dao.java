@@ -6,9 +6,8 @@ public class Dao {
 	
 	private String url;
 	private String driver;
-	private Statement st;
-	private ResultSet rs;
 	private PreparedStatement pstmt;
+	private ResultSet rs;
 	
 	// Date time zone definition
 	public static final Calendar tzUTC = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -37,54 +36,28 @@ public class Dao {
 		}
 		catch (SQLException objErroConexao) 
 		{
-			System.out.println("Erro na Conexao");
+			System.out.println("Erro no getConnection.");
 			return null;
-		}
-	}
-	
-	public void ExecuteUpdate(String query)
-	{
-		Connection con = getConnection();
-		try
-		{	
-			pstmt = con.prepareStatement(query);
-			pstmt.executeUpdate();
-		}
-		catch(SQLException e)
-		{
-			pstmt = null;
-			System.out.println("Erro ao executar UPDATE.");
-		}
-		finally 
-		{
-			try 
-			{
-		        if (pstmt != null) 
-		        {
-		        	pstmt.close();
-		        }
-		        if (con != null) 
-		        {
-		            con.close();
-		        }
-			} 
-			catch (SQLException ex) 
-			{
-				System.out.println("Erro ao fechar conexões de update.");
-			}
 		}
 	}
 	
 	public boolean IsLoginNameOK(String Login)
 	{
-		String query = "SELECT COUNT(*) as count FROM usuarios WHERE login = '" + Login + "'";
+		String query = "SELECT COUNT(*) as count FROM usuarios WHERE login = ?";
 		Connection con = getConnection();
 		try
 		{
-			st = con.createStatement(); 
-			//st.setQueryTimeout(30);
-			rs = st.executeQuery(query);
+			// Prepare query statement and avoid SQL injection
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, Login);
+			
+			// Execute query
+			rs = pstmt.executeQuery(query);
+			
+			// Get first query return row
 			rs.next();
+			
+			// Verify if the user exists on DB and close the result set
 			if(rs.getInt("count") > 0)
 			{
 				rs.close();
@@ -109,9 +82,9 @@ public class Dao {
 				{
 					rs.close();
 				}
-		        if (st != null) 
+		        if (pstmt != null) 
 		        {
-		            st.close();
+		            pstmt.close();
 		        }
 		        if (con != null) 
 		        {
@@ -127,37 +100,56 @@ public class Dao {
 
 	public boolean IsUserBlocked(String Login) {
 		
-		String query = "SELECT blocked FROM usuarios WHERE login = '" + Login + "'";
+		String query = "SELECT blocked FROM usuarios WHERE login = ?";
 		Connection con = getConnection();
 		try
 		{
-			st = con.createStatement(); 
-			//st.setQueryTimeout(30);
-			rs = st.executeQuery(query);
-		
+			// Prepare query statement and avoid SQL injection
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, Login);
+			
+			// Execute query
+			rs = pstmt.executeQuery(query);
+		    
+			// Get first query return row
 			rs.next();
+			
+			// Get blocked boolean
 			boolean response = rs.getBoolean("blocked");
+			
+			// Close result set
 			rs.close();
 			
 			// Verify if blocked time is over
 			if(response == true)
 			{
-				query = "SELECT blockedDateTime FROM usuarios WHERE login = '" + Login + "'";
-				st = con.createStatement(); 
-				//st.setQueryTimeout(30);
-				rs = st.executeQuery(query);
+				query = "SELECT blockedDateTime FROM usuarios WHERE login = ?";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, Login);
 				
+				// Execute query
+				rs = pstmt.executeQuery(query);
+				
+				// Get first result 
 				rs.next();
+				
+				// Get the time user was blocked 
 				Timestamp  blockedDateTime =  rs.getTimestamp("blockedDateTime",tzUTC);
+				
+				// CLose result set
 				rs.close();
 				
+				// Get dateTime now for comparison
 				Calendar cal = Calendar.getInstance();
 				
-				// Verify if waiting time is over. (120000 milliseconds = 2 minutes)
+				// Verify if blocked time is over. (120000 milliseconds = 2 minutes)
 				if( (cal.getTime().getTime() - blockedDateTime.getTime()) > 120000 )
 				{
-					String updateString = "UPDATE usuarios SET  blocked = false WHERE login = '" + Login + "'";
-					ExecuteUpdate(updateString);
+					// Change blocked flag for false
+					String updateString = "UPDATE usuarios SET  blocked = 0 WHERE login = ?";
+					pstmt = con.prepareStatement(updateString);
+					pstmt.setString(1, Login);
+					pstmt.executeUpdate();
 					response = false;
 				}
 			}
@@ -177,9 +169,9 @@ public class Dao {
 				{
 					rs.close();
 				}
-		        if (st != null) 
+		        if (pstmt != null) 
 		        {
-		            st.close();
+		            pstmt.close();
 		        }
 		        if (con != null) 
 		        {

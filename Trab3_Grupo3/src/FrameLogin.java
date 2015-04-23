@@ -38,11 +38,11 @@ public class FrameLogin extends JFrame{
   		
   		/*****  Adjusting the size of attributes *****/
   		
-  		TXT_Log.setBounds(90,50,80,25);
+  		TXT_Log.setBounds  (90,50,80,25);
   		
   		BUT_Login.setBounds(90,150,65,25);
 		
-  		LB_Login.setBounds(40,49,65,25);
+  		LB_Login.setBounds (40,49,65,25);
   		
   		
 		/*********************************************/
@@ -67,22 +67,28 @@ public class FrameLogin extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+  		    	// Create DAO object
   		    	Dao dao = new Dao();
-  		    	String login = TXT_Log.getText();
+  		    	
+  		    	// CReate user object
+  		    	User user = User.GetUserObj();
+  		    	user.setLogin(TXT_Log.getText());
   		    	
   		    	// Verify if Login Name exists
-  		    	if(dao.IsLoginNameOK(login))
+  		    	if(dao.IsLoginNameOK(user.getLogin()))
   				{
   		    		// Verify if user is blocked
-  		    		if(dao.IsUserBlocked(login))
+  		    		if(dao.IsUserBlocked(user.getLogin()))
   		    		{
   		    			JOptionPane.showMessageDialog(ThisFrame , "O usuário foi bloqueado por 2 minutos. Aguarde a liberação.");
   		    		}
   		    		else
   		    		{
-	  					//FramePassword FM_Password = new FramePassword("Etapa 2 - Senha");
-	  					//FM_Password.setVisible(true);
+  		    			// Open password frame
+	  					FramePassword FM_Password = new FramePassword("Etapa 2 - Senha");
+	  					FM_Password.setVisible(true);
 	  					
+	  					// Close this frame
 	  		    		ThisFrame.dispose();
   		    		}
   				}
