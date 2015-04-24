@@ -14,9 +14,9 @@ import javax.swing.JTextField;
 
 public class FramePassword extends JFrame{
 
-	public JFrame             ThisFrame;
-	public ArrayList<Integer> list_psw_1;
-	public ArrayList<Integer> list_psw_2;
+	public JFrame            ThisFrame;
+	public ArrayList<String> list_possible_psws;
+	public int trys = 3; 
 	
 	public FramePassword(String Tiltle)
 	{
@@ -25,6 +25,8 @@ public class FramePassword extends JFrame{
 		ThisFrame = this;
 		
 		setLayout(null);
+		
+		
 		
 		/*****  Setting the attributes of the Frame *****/
 		
@@ -78,11 +80,8 @@ public class FramePassword extends JFrame{
   		/********************************************/
   		
   		
-  		
   		// Instantiating password lists
-		list_psw_1 = new ArrayList<Integer>();
-		list_psw_2 = new ArrayList<Integer>();
-		
+  		list_possible_psws = new ArrayList<String>();
 		
   		
   		/*******************  Setting listeners *************************/
@@ -91,30 +90,63 @@ public class FramePassword extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+  		    	// Define the selected numbers
+  		    	String num1;
+  		    	String num2;
+  		    	
   		    	if (e.getSource() == BTN_1) 
   		    	{
-  		    		list_psw_1.add( (Integer) BTN_1.getClientProperty("value1") );
-  		    		list_psw_2.add( (Integer) BTN_1.getClientProperty("value2") );
+  		    		num1 = BTN_1.getClientProperty("value1").toString();
+  		    		num2 = BTN_1.getClientProperty("value2").toString();
   		    	}
   		    	else if (e.getSource() == BTN_2) 
   		    	{
-  		    		list_psw_1.add( (Integer) BTN_2.getClientProperty("value1") );
-  		    		list_psw_2.add( (Integer) BTN_2.getClientProperty("value2") );
+  		    		num1 = BTN_2.getClientProperty("value1").toString();
+  		    		num2 = BTN_2.getClientProperty("value2").toString();
   		    	}
   		    	else if (e.getSource() == BTN_3) 
   		    	{
-  		    		list_psw_1.add( (Integer) BTN_3.getClientProperty("value1") );
-  		    		list_psw_2.add( (Integer) BTN_3.getClientProperty("value2") );
+  		    		num1 = BTN_3.getClientProperty("value1").toString();
+  		    		num2 = BTN_3.getClientProperty("value2").toString();
   		    	}
   		    	else if (e.getSource() == BTN_4) 
   		    	{
-  		    		list_psw_1.add( (Integer) BTN_4.getClientProperty("value1") );
-  		    		list_psw_2.add( (Integer) BTN_4.getClientProperty("value2") );
+  		    		num1 = BTN_4.getClientProperty("value1").toString();
+  		    		num2 = BTN_4.getClientProperty("value2").toString();
   		    	}
-  		    	else if (e.getSource() == BTN_5) 
+  		    	else
   		    	{
-  		    		list_psw_1.add( (Integer) BTN_5.getClientProperty("value1") );
-  		    		list_psw_2.add( (Integer) BTN_5.getClientProperty("value2") );
+  		    		num1 = BTN_5.getClientProperty("value1").toString();
+  		    		num2 = BTN_5.getClientProperty("value2").toString();
+  		    	}
+  		    	
+  		    	// Double the list if it already contains something
+  		    	if(list_possible_psws.size() > 0)
+  		    	{
+  		    		int initial_size = list_possible_psws.size();
+  		    		for(int i=0 ; i < initial_size ; i++)
+  		    		{
+  		    			list_possible_psws.add(list_possible_psws.get(i));
+  		    		}
+  		    		
+  		    		// Adding the number1 to the first hlaf
+  		    		int half_index = list_possible_psws.size()/2;
+  		    		for(int i=0 ; i < half_index ; i++)
+  		    		{
+  		    			list_possible_psws.set(i, list_possible_psws.get(i) + num1);
+  		    		}
+  		    		
+  		    		// Adding number2  to second half
+  		    		for(int i=half_index ; i < list_possible_psws.size() ; i++)
+  		    		{
+  		    			list_possible_psws.set(i, list_possible_psws.get(i) + num2);
+  		    		}  		    		
+  		    		
+  		    	}
+  		    	else
+  		    	{
+  		    		list_possible_psws.add(num1);
+  		    		list_possible_psws.add(num2);  		    		
   		    	}
   		    }
   		    
@@ -130,12 +162,54 @@ public class FramePassword extends JFrame{
   		BUT_OK.addActionListener( new ActionListener () {
   			
   		    public void actionPerformed(ActionEvent e) 
-  		    {  		    	
-  		    	// Create possible password list from  list_psw_1 and list_psw_2
+  		    {  	
+  		    	// Create DAO object
+  		    	Dao dao = new Dao();
   		    	
-  		    	
+  		    	boolean pws_ok_flag	= false;
+  		    	String user_salt 	= dao.GetUserSalt(User.GetUserObj().getLogin());
+  		    	String user_pwsHash	= dao.GetPswHash(User.GetUserObj().getLogin());
   		    	
   		    	// Verify all possibilities for a match of the one in DB
+  		    	for(String psw_pos : list_possible_psws)
+  		    	{
+  		    		// pws_pos + salt hash
+  		    		String passwordToTest = psw_pos + user_salt;
+  		    		
+  		    		// If user password match, set flag to true
+  		    		if(passwordToTest.equals(user_pwsHash))
+  		    		{
+  		    			pws_ok_flag = true;
+  		    		}
+  		    	}
+  		    	
+  		    	if(pws_ok_flag)
+  		    	{
+  		    		// Close this frame
+  		    		ThisFrame.dispose();
+  		    	}
+  		    	else
+  		    	{
+  		    		trys--;
+  		    		if(trys == 0)
+  		    		{
+  		    			// Block User
+  		    			dao.BlockUser(User.GetUserObj().getLogin());
+  		    			
+  		    			JOptionPane.showMessageDialog(ThisFrame , "Senha errada. Suas tentaivas acabaram. Usuário bloqueado por 2 minutos.");
+  		    			
+  		    			// Open Login frame
+	  					FrameLogin FM_Login = new FrameLogin("Etapa 1 - Login");
+	  					FM_Login.setVisible(true);
+	  					
+	  					// Close this frame
+	  		    		ThisFrame.dispose();
+  		    		}
+  		    		else
+  		    		{
+  		    			JOptionPane.showMessageDialog(ThisFrame , "Senha errada, você possui " + trys + " tentativas.");
+  		    		}
+  		    	}
   		    }
   		    
   		  });

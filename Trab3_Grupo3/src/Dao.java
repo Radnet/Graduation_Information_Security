@@ -1,4 +1,7 @@
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -52,7 +55,7 @@ public class Dao {
 			pstmt.setString(1, Login);
 			
 			// Execute query
-			rs = pstmt.executeQuery(query);
+			rs = pstmt.executeQuery();
 			
 			// Get first query return row
 			rs.next();
@@ -98,7 +101,8 @@ public class Dao {
 		}
 	}
 
-	public boolean IsUserBlocked(String Login) {
+	public boolean IsUserBlocked(String Login) 
+	{
 		
 		String query = "SELECT blocked FROM usuarios WHERE login = ?";
 		Connection con = getConnection();
@@ -109,7 +113,7 @@ public class Dao {
 			pstmt.setString(1, Login);
 			
 			// Execute query
-			rs = pstmt.executeQuery(query);
+			rs = pstmt.executeQuery();
 		    
 			// Get first query return row
 			rs.next();
@@ -128,13 +132,13 @@ public class Dao {
 				pstmt.setString(1, Login);
 				
 				// Execute query
-				rs = pstmt.executeQuery(query);
+				rs = pstmt.executeQuery();
 				
 				// Get first result 
 				rs.next();
 				
-				// Get the time user was blocked 
-				Timestamp  blockedDateTime =  rs.getTimestamp("blockedDateTime",tzUTC);
+				// Get the time user was blocked
+				long blockedDateTime = rs.getLong("blockedDateTime");
 				
 				// CLose result set
 				rs.close();
@@ -143,7 +147,7 @@ public class Dao {
 				Calendar cal = Calendar.getInstance();
 				
 				// Verify if blocked time is over. (120000 milliseconds = 2 minutes)
-				if( (cal.getTime().getTime() - blockedDateTime.getTime()) > 120000 )
+				if( (cal.getTime().getTime() - blockedDateTime) > 120000 )
 				{
 					// Change blocked flag for false
 					String updateString = "UPDATE usuarios SET  blocked = 0 WHERE login = ?";
@@ -158,8 +162,144 @@ public class Dao {
 		}
 		catch(SQLException e)
 		{
-			System.out.println("Erro ao executar query de Login.");
-			return false;
+			System.out.println("Erro ao executar query de Blocked.");
+			return true;
+		} 
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+	}
+	
+	public String GetPswHash(String Login)
+	{
+		String query = "SELECT senha FROM usuarios WHERE login = ?";
+		Connection con = getConnection();
+		try
+		{
+			// Prepare query statement and avoid SQL injection
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, Login);
+		
+			// Execute query
+			rs = pstmt.executeQuery();
+			
+			// Get first query return row
+			rs.next();
+			
+			// Verify if the user exists on DB and close the result set
+			return rs.getString("senha");
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar query de PswHash.");
+		}
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+		return "";
+	}
+	
+	public String GetUserSalt(String Login)
+	{
+		String query = "SELECT salt FROM usuarios WHERE login = ?";
+		Connection con = getConnection();
+		try
+		{
+			// Prepare query statement and avoid SQL injection
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, Login);
+		
+			// Execute query
+			rs = pstmt.executeQuery();
+			
+			// Get first query return row
+			rs.next();
+			
+			// Verify if the user exists on DB and close the result set
+			return rs.getString("salt");
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar query de salt.");
+		}
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+		return "";
+	}
+	
+	public void BlockUser(String Login)
+	{
+		Connection con = getConnection();
+		// Get dateTime now for comparison
+		Calendar cal = Calendar.getInstance();
+		try
+		{
+			String updateString = "UPDATE usuarios SET  blocked = 1,blockedDateTime = " + cal.getTime().getTime() + "  WHERE login = ?";
+			pstmt = con.prepareStatement(updateString);
+			pstmt.setString(1, Login);
+			pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar update de Block.");
 		}
 		finally 
 		{
