@@ -16,6 +16,7 @@ public class FramePassword extends JFrame{
 	public JFrame            ThisFrame;
 	public ArrayList<String> list_possible_psws;
 	public int trys = 3; 
+	public int countDigits = 0;
 	
 	public FramePassword(String Tiltle)
 	{
@@ -24,7 +25,7 @@ public class FramePassword extends JFrame{
 		ThisFrame = this;
 		
 		setLayout(null);
-		
+				
 		/*****  Setting the attributes of the Frame *****/
 		
 		JButton BUT_OK  		= new JButton("OK");
@@ -45,14 +46,14 @@ public class FramePassword extends JFrame{
   		  		
   		/*****  Adjusting the size of attributes *****/
   		
-  		PAW_Pass.setBounds   (90,50,150,25);
-  		BUT_OK.setBounds     (90,170,65,25);
-  		
-  		BTN_1.setBounds      (10, 100,70,40);
-  		BTN_2.setBounds      (85, 100,70,40);
-  		BTN_3.setBounds      (160,100,70,40);
-  		BTN_4.setBounds      (235,100,70,40);
-  		BTN_5.setBounds      (310,100,70,40);
+  		PAW_Pass.setBounds (90,50,150,25);
+  		BUT_OK.setBounds   (90,170,65,25);
+  		                   
+  		BTN_1.setBounds    (10, 100,70,40);
+  		BTN_2.setBounds    (85, 100,70,40);
+  		BTN_3.setBounds    (160,100,70,40);
+  		BTN_4.setBounds    (235,100,70,40);
+  		BTN_5.setBounds    (310,100,70,40);
   		
   		LB_Password.setBounds(40,49,65,25);
   		
@@ -87,8 +88,15 @@ public class FramePassword extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+  		    	countDigits++;
+  		    	
   		    	// draw "*" on text box
-  		    	PAW_Pass.setText(PAW_Pass.getText() + "*");
+  		    	String pswField = "";
+  		    	for(int i=0 ; i < countDigits ; i++)
+  		    	{
+  		    		pswField = pswField + "*";
+  		    	}
+  		    	PAW_Pass.setText(pswField);
   		    	
   		    	// Define the selected numbers
   		    	String num1;
@@ -197,7 +205,7 @@ public class FramePassword extends JFrame{
   		    			dao.BlockUser(User.GetUserObj().getLogin());
   		    			
   		    			JOptionPane.showMessageDialog(ThisFrame , "Senha errada. Suas tentaivas acabaram. Usuário bloqueado por 2 minutos.");
-  		    			
+  		    			  		    			
   		    			// Open Login frame
 	  					FrameLogin FM_Login = new FrameLogin("Etapa 1 - Login");
 	  					FM_Login.setVisible(true);
@@ -206,10 +214,16 @@ public class FramePassword extends JFrame{
 	  		    		ThisFrame.dispose();
   		    		}
   		    		else
-  		    		{
+  		    		{	
   		    			JOptionPane.showMessageDialog(ThisFrame , "Senha errada, você possui " + trys + " tentativas.");
   		    		}
   		    	}
+  		    	
+  		    	// Clear psw possibilities
+		    	list_possible_psws.clear();
+  		    	
+		    	countDigits = 0;
+		    	PAW_Pass.setText("");
   		    }
   		    
   		  });
