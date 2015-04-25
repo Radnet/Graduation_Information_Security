@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 
 public class FramePassword extends JFrame{
@@ -25,8 +24,6 @@ public class FramePassword extends JFrame{
 		ThisFrame = this;
 		
 		setLayout(null);
-		
-		
 		
 		/*****  Setting the attributes of the Frame *****/
 		
@@ -90,6 +87,9 @@ public class FramePassword extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+  		    	// draw "*" on text box
+  		    	PAW_Pass.setText(PAW_Pass.getText() + "*");
+  		    	
   		    	// Define the selected numbers
   		    	String num1;
   		    	String num2;
