@@ -193,6 +193,10 @@ public class FramePassword extends JFrame{
   		    	
   		    	if(pws_ok_flag)
   		    	{
+  		    		// OK, go to OTP step
+  		    		FrameTanList FM_OTP = new FrameTanList("Etapa 3 - OTP");
+  		    		FM_OTP.setVisible(true);
+  		    		
   		    		// Close this frame
   		    		ThisFrame.dispose();
   		    	}

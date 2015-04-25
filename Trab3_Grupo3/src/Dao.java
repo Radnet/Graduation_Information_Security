@@ -2,6 +2,7 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -323,5 +324,60 @@ public class Dao {
 				System.out.println("Erro ao fechar conexões.");
 			}
 		}
+	}
+	
+	public ArrayList<String> GetOneTimePswsHashs(String Login)
+	{
+		ArrayList<String> responseList = new ArrayList<String>();
+		
+		String query = "SELECT tanList FROM tanLists WHERE login = ?";
+		Connection con = getConnection();
+		
+		try
+		{
+			// Prepare query statement and avoid SQL injection
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, Login);
+		
+			// Execute query
+			rs = pstmt.executeQuery();
+			
+			// Get first query return row
+			rs.next();
+			
+			String[] splitArray = rs.getString("tanList").split(",");
+			
+			for(String str : splitArray)
+			{
+				responseList.add(str);
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar query de PswHash.");
+		}
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+		return responseList;
 	}
 }
