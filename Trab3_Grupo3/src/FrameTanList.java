@@ -14,9 +14,9 @@ public class FrameTanList extends JFrame{
 	public JFrame ThisFrame;
 	public int trys = 3; 
 	
-	public FrameTanList(String Tiltle)
+	public FrameTanList(String Title)
 	{
-		super(Tiltle);
+		super(Title);
 		
 		ThisFrame = this;
 		

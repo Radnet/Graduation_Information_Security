@@ -18,9 +18,9 @@ public class FramePassword extends JFrame{
 	public int trys = 3; 
 	public int countDigits = 0;
 	
-	public FramePassword(String Tiltle)
+	public FramePassword(String Title)
 	{
-		super(Tiltle);
+		super(Title);
 		
 		ThisFrame = this;
 		
@@ -137,7 +137,7 @@ public class FramePassword extends JFrame{
   		    			list_possible_psws.add(list_possible_psws.get(i));
   		    		}
   		    		
-  		    		// Adding the number1 to the first hlaf
+  		    		// Adding the number1 to the first half
   		    		int half_index = list_possible_psws.size()/2;
   		    		for(int i=0 ; i < half_index ; i++)
   		    		{

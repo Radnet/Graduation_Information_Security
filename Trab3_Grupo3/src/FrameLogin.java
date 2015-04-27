@@ -13,9 +13,9 @@ public class FrameLogin extends JFrame{
 
 	public JFrame ThisFrame;
 	
-	public FrameLogin(String Tiltle)
+	public FrameLogin(String Title)
 	{
-		super(Tiltle);
+		super(Title);
 		
 		ThisFrame = this;
 		
