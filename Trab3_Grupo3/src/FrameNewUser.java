@@ -1,9 +1,14 @@
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -13,6 +18,7 @@ import javax.swing.JTextField;
 public class FrameNewUser extends JFrame{
 
 	public JFrame ThisFrame;
+	public byte[] Kpubbuffer;
 	
 	public FrameNewUser(String Title)
 	{
@@ -21,6 +27,8 @@ public class FrameNewUser extends JFrame{
 		setLayout(null);
 		
 		User user = User.GetUserObj();
+		
+		Dao dao = new Dao();
 		
 		/*****  Setting the attributes of the Frame *****/
 		
@@ -42,21 +50,21 @@ public class FrameNewUser extends JFrame{
   		JLabel LB_UserKPubPath      = new JLabel("Caminho Chave Publica:");
   		JLabel LB_UserTanSize       = new JLabel("Tamanho TAN list:");     
   		
-  		JTextField TXT_UserName     = new JTextField();
-  		JTextField TXT_UserLogin    = new JTextField();
-  		JTextField TXT_UserGroup    = new JTextField();
-  		JTextField TXT_UserPsw      = new JTextField();
-  		JTextField TXT_UserPswConf  = new JTextField();
-  		JTextField TXT_UserTanSize  = new JTextField();
+  		JTextField TXT_UserName     = new JTextField(5);
+  		JFormattedTextField TXT_UserLogin    = new JFormattedTextField();
+  		JFormattedTextField TXT_UserGroup    = new JFormattedTextField();
+  		JFormattedTextField TXT_UserPsw      = new JFormattedTextField();
+  		JFormattedTextField TXT_UserPswConf  = new JFormattedTextField();
+  		JFormattedTextField TXT_UserTanSize  = new JFormattedTextField();
   		
   		JButton BTN_NewUser = new JButton("Cadastrar");
   		JButton BTN_Chooser = new JButton(">");
+  		JButton BUT_Back = new JButton("Voltar");
   		
-  		JFileChooser KpubChooser = new JFileChooser();
+  		final JFileChooser KpubChooser = new JFileChooser();
   		
   		//***********************************************
   		
-  		JButton BUT_Back = new JButton("Voltar");
   		
 		/***********************************************/
   		
@@ -64,19 +72,19 @@ public class FrameNewUser extends JFrame{
   		
   		/*****  Adjusting the size of attributes *****/
   		
-  		LB_Login.setBounds    (10,5,  350,25);
-  		LB_Grupo.setBounds    (10,25, 350,25);
-  		LB_Decricao.setBounds (10,45, 350,25);
-  		LB_Access.setBounds   (10,65, 350,25);
-  		LB_userForm.setBounds (10,105,350,25);
-  		
-  		LB_UserName    .setBounds (10,125,350,25);    
-  		LB_UserLogin   .setBounds (10,155,350,25);   
-  		LB_UserGroup   .setBounds (10,185,350,25);   
-  		LB_UserPsw     .setBounds (10,215,350,25);     
-  		LB_UserPswConf .setBounds (10,245,350,25); 
-  		LB_UserKPubPath.setBounds (10,275,350,25);
-  		LB_UserTanSize .setBounds (10,305,350,25);
+  		LB_Login        .setBounds (10,5,  350,25);
+  		LB_Grupo        .setBounds (10,25, 350,25);
+  		LB_Decricao     .setBounds (10,45, 350,25);
+  		LB_Access       .setBounds (10,65, 350,25);
+  		LB_userForm     .setBounds (10,105,350,25);
+  		                
+  		LB_UserName     .setBounds (10,125,350,25);    
+  		LB_UserLogin    .setBounds (10,155,350,25);   
+  		LB_UserGroup    .setBounds (10,185,350,25);   
+  		LB_UserPsw      .setBounds (10,215,350,25);     
+  		LB_UserPswConf  .setBounds (10,245,350,25); 
+  		LB_UserKPubPath .setBounds (10,275,350,25);
+  		LB_UserTanSize  .setBounds (10,305,350,25);
   		
   		TXT_UserName    .setBounds (160,125,350,25);
   		TXT_UserLogin   .setBounds (160,155,350,25);
@@ -120,7 +128,21 @@ public class FrameNewUser extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
-  		    	KpubChooser.showOpenDialog(ThisFrame);
+  		      if (KpubChooser.showOpenDialog(ThisFrame) == JFileChooser.APPROVE_OPTION) { 
+  		    	  	try {
+  		    	  		Kpubbuffer = new byte[1024];
+  		    	  		
+						InputStream is = new FileInputStream(KpubChooser.getSelectedFile());
+						is.read(Kpubbuffer);
+						
+						is.close();
+						
+					} catch(IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+  		        }
+
   		    }
   		    
   		  });

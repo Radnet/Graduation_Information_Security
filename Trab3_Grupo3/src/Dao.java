@@ -564,4 +564,44 @@ public class Dao {
 		}
 		return 0;
 	}
+
+	public void setUserPublicKey(String login, byte[] buffer) {
+
+		Connection con = getConnection();
+		
+		try
+		{
+			String updateString = "UPDATE usuarios SET  pubkey = " + buffer + "  WHERE login = ?";
+			pstmt = con.prepareStatement(updateString);
+			pstmt.setString(1, login);
+			pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar query de setUserPublicKey.");
+		}
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+		
+	}
 }

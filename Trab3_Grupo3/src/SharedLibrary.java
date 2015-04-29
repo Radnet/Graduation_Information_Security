@@ -30,4 +30,16 @@ public class SharedLibrary {
 		user.setDescricao(dao.GetName(Login));
 		user.setAccess(dao.GetAccess(Login));
 	}
+	
+	public static String GetHexadecimal(byte[] info) {
+		// convert to hexadecimal
+		StringBuffer buf = new StringBuffer();
+		for (int i = 0; i < info.length; i++) {
+			String hex = Integer.toHexString(0x0100 + (info[i] & 0x00FF))
+					.substring(1);
+			buf.append((hex.length() < 2 ? "0" : "") + hex);
+		}
+		return buf.toString();
+	}
+
 }
