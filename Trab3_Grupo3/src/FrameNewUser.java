@@ -66,7 +66,15 @@ public class FrameNewUser extends JFrame{
   		LB_Decricao.setBounds (10,45, 350,25);
   		LB_Access.setBounds   (10,65, 350,25);
   		LB_userForm.setBounds (10,105,350,25);
-  		                              
+  		
+  		LB_UserName.setBounds 	  (10,105,350,25);    
+  		LB_UserLogin.setBounds 	  (10,105,350,25);   
+  		LB_UserGroup.setBounds 	  (10,105,350,25);   
+  		LB_UserPsw.setBounds 	  (10,105,350,25);     
+  		LB_UserPswConf.setBounds  (10,105,350,25); 
+  		LB_UserKPubPath.setBounds (10,105,350,25);
+  		LB_UserTanSize.setBounds  (10,105,350,25); 
+  		
 		/*********************************************/
 
   		/*****  Adding attributes to the  panel *****/

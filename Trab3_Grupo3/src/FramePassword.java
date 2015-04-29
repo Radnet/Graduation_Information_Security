@@ -29,6 +29,7 @@ public class FramePassword extends JFrame{
 		/*****  Setting the attributes of the Frame *****/
 		
 		JButton BUT_OK  		= new JButton("OK");
+		JButton BUT_Clear  		= new JButton("Limpar");
 		
 		// 5 buttons representing the password numbers
 		JButton BTN_1   		= new JButton();
@@ -47,6 +48,7 @@ public class FramePassword extends JFrame{
   		/*****  Adjusting the size of attributes *****/
   		
   		PAW_Pass.setBounds (90,50,150,25);
+  		BUT_Clear.setBounds(250,50,85,25);
   		BUT_OK.setBounds   (90,170,65,25);
   		                   
   		BTN_1.setBounds    (10, 100,70,40);
@@ -62,6 +64,8 @@ public class FramePassword extends JFrame{
 
   		PopulateNumberBTNs(BTN_1, BTN_2, BTN_3, BTN_4, BTN_5);
   		
+  		PAW_Pass.setEditable(false);
+  		
   		/*****  Adding attributes to the  panel *****/
   		
   		Panel.add(BUT_OK);
@@ -73,6 +77,7 @@ public class FramePassword extends JFrame{
   		Panel.add(BTN_5);
   		
   		Panel.add(PAW_Pass);
+  		Panel.add(BUT_Clear);
   		Panel.add(LB_Password);
   		
   		/********************************************/
@@ -228,6 +233,17 @@ public class FramePassword extends JFrame{
   		    	
 		    	countDigits = 0;
 		    	PAW_Pass.setText("");
+  		    }
+  		    
+  		  });
+  		
+  		BUT_Clear.addActionListener( new ActionListener () {
+  			
+  		    public void actionPerformed(ActionEvent e) 
+  		    {
+  		    	list_possible_psws.clear();
+  		    	countDigits = 0;
+  		    	PAW_Pass.setText("");
   		    }
   		    
   		  });
