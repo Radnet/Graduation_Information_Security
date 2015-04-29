@@ -23,13 +23,38 @@ public class FrameNewUser extends JFrame{
 		
 		/*****  Setting the attributes of the Frame *****/
 		
+		//********** HEADER*******************************
   		JLabel LB_Login     = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo     = new JLabel("Grupo: " + user.getGrupo());
   		JLabel LB_Decricao  = new JLabel("Descrição: " + user.getDescricao());
   		JLabel LB_Access    = new JLabel("Total de Acessos: " + user.getAccess());
   		JLabel LB_userForm  = new JLabel("Formulário de Cadastro:");
+  		//************************************************
   		
-  		JButton BUT_NewUser = new JButton("1 - Cadastrar Novo Usuário");
+  		//**************** FORM **************************
+  		
+  		JLabel LB_UserName          = new JLabel();
+  		JLabel LB_UserLogin         = new JLabel();
+  		JLabel LB_UserGroup         = new JLabel();
+  		JLabel LB_UserPsw           = new JLabel();
+  		JLabel LB_UserPswConf       = new JLabel();
+  		JLabel LB_UserKPubPath      = new JLabel();
+  		JLabel LB_UserTanSize       = new JLabel();
+  		
+  		JTextField TXT_UserName     = new JTextField();
+  		JTextField TXT_UserLogin    = new JTextField();
+  		JTextField TXT_UserGroup    = new JTextField();
+  		JTextField TXT_UserPsw      = new JTextField();
+  		JTextField TXT_UserPswConf  = new JTextField();
+  		JTextField TXT_UserKPubPath = new JTextField();
+  		JTextField TXT_UserTanSize  = new JTextField();
+  		
+  		JButton BUT_NewUser = new JButton("Cadastrar");
+  		
+  		//***********************************************
+  		
+  		JButton BUT_Back = new JButton("Voltar");
+  		
 		/***********************************************/
   		
   		Container Panel =  getContentPane();
@@ -52,6 +77,8 @@ public class FrameNewUser extends JFrame{
   		Panel.add(LB_Access);
   		Panel.add(LB_userForm);
   		
+  		
+  		
   		/********************************************/
   		
   		/*******************  Setting listeners *************************/
@@ -63,6 +90,20 @@ public class FrameNewUser extends JFrame{
     			// Open new user frame
 				FrameNewUser FM_NewUser = new FrameNewUser("Novo Usuário");
 				FM_NewUser.setVisible(true);
+				
+				// Close this frame
+	    		ThisFrame.dispose();
+  		    }
+  		    
+  		  });
+  		
+  		BUT_Back.addActionListener( new ActionListener () {
+  			
+  		    public void actionPerformed(ActionEvent e) 
+  		    {
+    			// Open new user frame
+				FrameMenu FM_Menu = new FrameMenu("Frame Menu");
+				FM_Menu.setVisible(true);
 				
 				// Close this frame
 	    		ThisFrame.dispose();

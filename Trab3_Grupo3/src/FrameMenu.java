@@ -80,6 +80,31 @@ public class FrameMenu extends JFrame{
   		    }
   		    
   		  });
+  		
+  		BUT_Folder.addActionListener( new ActionListener () {
+  			
+  		    public void actionPerformed(ActionEvent e) 
+  		    {
+    			
+  		    }
+  		    
+  		  });
+  		
+  		BUT_Exit.addActionListener( new ActionListener () {
+  			
+  		    public void actionPerformed(ActionEvent e) 
+  		    {	
+  		    	if(JOptionPane.showConfirmDialog(ThisFrame , "Tem certeza que deseja sair?") == 0)
+  		    	{
+  		    	// Close this frame
+  		    		ThisFrame.dispose();
+  		    		
+  		    		// End program
+  		    		System.exit(0);
+  		    	}
+  		    }
+  		    
+  		  });
   	
   		/****************************************************************/
   	
