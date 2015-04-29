@@ -2,6 +2,8 @@
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -170,12 +172,22 @@ public class FramePassword extends JFrame {
 
                 // Verify all possibilities for a match of the one in DB
                 for (String psw_pos : list_possible_psws) {
-                    // pws_pos + salt hash
-                    String passwordToTest = psw_pos + user_salt;
+                    try {
+                        // Generating digest for password possibility with salt
+                        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+                        messageDigest.update((psw_pos + user_salt).getBytes());
+                        byte[] pwDigest = messageDigest.digest();
 
-                    // If user password match, set flag to true
-                    if (passwordToTest.equals(user_pwsHash)) {
-                        pws_ok_flag = true;
+                        // Converting the digest to hex
+                        String passwordToTest = SharedLibrary.GetHexadecimal(pwDigest);
+
+                        // If user password match, set flag to true
+                        if (passwordToTest.equals(user_pwsHash)) {
+                            pws_ok_flag = true;
+                            break;
+                        }
+                    } catch (NoSuchAlgorithmException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
 
@@ -228,7 +240,8 @@ public class FramePassword extends JFrame {
          * *************************************************************
          */
         /**
-         * ********************* Centralizing the frame on the screen  ********************
+         * ********************* Centralizing the frame on the screen
+         * ********************
          */
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         setBounds((screenSize.width - 490) / 2, (screenSize.height - 370) / 2, 400, 250);
@@ -270,13 +283,13 @@ public class FramePassword extends JFrame {
         BTN_1.putClientProperty("value1", listValue.get(0));
         BTN_1.putClientProperty("value2", listValue.get(1));
         BTN_2.putClientProperty("value1", listValue.get(2));
-        BTN_2.putClientProperty("value2F", listValue.get(3));
+        BTN_2.putClientProperty("value2", listValue.get(3));
         BTN_3.putClientProperty("value1", listValue.get(4));
         BTN_3.putClientProperty("value2", listValue.get(5));
         BTN_4.putClientProperty("value1", listValue.get(6));
         BTN_4.putClientProperty("value2", listValue.get(7));
         BTN_5.putClientProperty("value1", listValue.get(8));
         BTN_5.putClientProperty("value2", listValue.get(9));
-        
+
     }
 }

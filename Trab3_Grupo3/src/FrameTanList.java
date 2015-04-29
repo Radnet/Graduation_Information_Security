@@ -2,7 +2,11 @@
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -83,40 +87,51 @@ public class FrameTanList extends JFrame {
         BUT_Ok.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                // Create DAO object
-                Dao dao = new Dao();
-
-                // VERIFY OTP
-                if (OtpList.get(OTPposition_index).equals(TXT_OneTimePsw.getText() + userSalt)) {
-                    // Increment access count
-                    dao.IncrementAccess(UserLogin);
-
-                    // Fill user props from the db infos
-                    SharedLibrary.FillUserProps(UserLogin);
-
-                    // Go to menu!
-                    FrameMenu FM_Menu = new FrameMenu("Menu");
-                    FM_Menu.setVisible(true);
-
-                    // Close this frame
-                    ThisFrame.dispose();
-                } else {
-                    trys--;
-                    if (trys == 0) {
-                        // Block User
-                        dao.BlockUser(User.GetUserObj().getLogin());
-
-                        JOptionPane.showMessageDialog(ThisFrame, "One time password errada. Suas tentaivas acabaram. Usu�rio bloqueado por 2 minutos.");
-
-                        // Open Login frame
-                        FrameLogin FM_Login = new FrameLogin("Etapa 1 - Login");
-                        FM_Login.setVisible(true);
-
+                try {
+                    // Create DAO object
+                    Dao dao = new Dao();
+                    
+                    //Generating digest for OneTimePW try
+                    MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+                    messageDigest.update((TXT_OneTimePsw.getText() + userSalt).getBytes());
+                    byte[] oneTimeDigest = messageDigest.digest();
+                    
+                    String oneTimeHex = SharedLibrary.GetHexadecimal(oneTimeDigest);
+                    
+                    // VERIFY OTP
+                    if (OtpList.get(OTPposition_index).equals(oneTimeHex)) {
+                        // Increment access count
+                        dao.IncrementAccess(UserLogin);
+                        
+                        // Fill user props from the db infos
+                        SharedLibrary.FillUserProps(UserLogin);
+                        
+                        // Go to menu!
+                        FrameMenu FM_Menu = new FrameMenu("Menu");
+                        FM_Menu.setVisible(true);
+                        
                         // Close this frame
                         ThisFrame.dispose();
                     } else {
-                        JOptionPane.showMessageDialog(ThisFrame, "One time password errada, voc� possui " + trys + " tentativas.");
+                        trys--;
+                        if (trys == 0) {
+                            // Block User
+                            dao.BlockUser(User.GetUserObj().getLogin());
+                            
+                            JOptionPane.showMessageDialog(ThisFrame, "One time password errada. Suas tentaivas acabaram. Usu�rio bloqueado por 2 minutos.");
+                            
+                            // Open Login frame
+                            FrameLogin FM_Login = new FrameLogin("Etapa 1 - Login");
+                            FM_Login.setVisible(true);
+                            
+                            // Close this frame
+                            ThisFrame.dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(ThisFrame, "One time password errada, voc� possui " + trys + " tentativas.");
+                        }
                     }
+                } catch (NoSuchAlgorithmException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
 
