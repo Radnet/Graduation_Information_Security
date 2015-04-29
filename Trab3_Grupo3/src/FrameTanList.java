@@ -79,7 +79,15 @@ public class FrameTanList extends JFrame{
   		    	// VERIFY OTP
   		    	if(OtpList.get(OTPposition_index).equals(TXT_OneTimePsw.getText() + userSalt))
   		    	{
+  		    		// Increment access count
+  		    		dao.IncrementAccess(UserLogin);
+  		    		
+  		    		// Fill user props from the db infos
+  		    	    SharedLibrary.FillUserProps(UserLogin);
+  		    		
   		    		// Go to menu!
+  		    		FrameMenu FM_Menu = new FrameMenu("Menu");
+  		    		FM_Menu.setVisible(true);
   		    		
   		    		// Close this frame
   		    		ThisFrame.dispose();
@@ -124,4 +132,5 @@ public class FrameTanList extends JFrame{
   		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+	
 }

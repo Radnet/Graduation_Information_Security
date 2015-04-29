@@ -239,6 +239,7 @@ public class Dao {
 	}
 	
 	public String GetUserSalt(String Login)
+
 	{
 		String query = "SELECT salt FROM usuarios WHERE login = ?";
 		Connection con = getConnection();
@@ -379,5 +380,188 @@ public class Dao {
 			}
 		}
 		return responseList;
+	}
+
+	public boolean IsAdmin(String Login)
+	{
+		String query = "SELECT isAdmin FROM usuarios WHERE login = ?";
+		Connection con = getConnection();
+		
+		try
+		{
+			// Prepare query statement and avoid SQL injection
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, Login);
+		
+			// Execute query
+			rs = pstmt.executeQuery();
+			
+			// Get first query return row
+			rs.next();
+			
+			return rs.getBoolean("isAdmin");
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar query de IsAdmin.");
+		}
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+		return false;
+	}
+
+	public void IncrementAccess(String Login)
+	{
+		Connection con = getConnection();
+		
+		try
+		{
+			String updateString = "UPDATE usuarios SET  acessos = acessos + 1  WHERE login = ?";
+			pstmt = con.prepareStatement(updateString);
+			pstmt.setString(1, Login);
+			pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar query de IncrementAccess.");
+		}
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+	}
+
+	public String GetName(String Login)
+	{
+		String query = "SELECT nome FROM usuarios WHERE login = ?";
+		Connection con = getConnection();
+		try
+		{
+			// Prepare query statement and avoid SQL injection
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, Login);
+		
+			// Execute query
+			rs = pstmt.executeQuery();
+			
+			// Get first query return row
+			rs.next();
+			
+			// Verify if the user exists on DB and close the result set
+			return rs.getString("nome");
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar query de GetName.");
+		}
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+		return "";
+	}
+	
+	public int GetAccess(String Login)
+	{
+		String query = "SELECT acessos FROM usuarios WHERE login = ?";
+		Connection con = getConnection();
+		try
+		{
+			// Prepare query statement and avoid SQL injection
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, Login);
+		
+			// Execute query
+			rs = pstmt.executeQuery();
+			
+			// Get first query return row
+			rs.next();
+			
+			// Verify if the user exists on DB and close the result set
+			return rs.getInt("acessos");
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Erro ao executar query de GetName.");
+		}
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+				{
+					rs.close();
+				}
+		        if (pstmt != null) 
+		        {
+		            pstmt.close();
+		        }
+		        if (con != null) 
+		        {
+		            con.close();
+		        }
+			} 
+			catch (SQLException ex) 
+			{
+				System.out.println("Erro ao fechar conexões.");
+			}
+		}
+		return 0;
 	}
 }
