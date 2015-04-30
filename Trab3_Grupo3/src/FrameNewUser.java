@@ -292,9 +292,9 @@ public class FrameNewUser extends JFrame{
 		// Verify sequences on password
 		for(int i=1 ; i < psw.length() ; i++)
 		{
-			if(Math.abs(psw.charAt(i) - psw.charAt(i-1)) == 1)
+			if(Math.abs(psw.charAt(i) - psw.charAt(i-1)) == 1 || psw.charAt(i) == psw.charAt(i-1))
 			{
-				ErrorMessage = "A senha nao pode conter nenhum tipo de sequencia";
+				ErrorMessage = "A senha nao pode conter nenhum tipo de sequencia ou repeticao";
 				return false;
 			}
 		}
