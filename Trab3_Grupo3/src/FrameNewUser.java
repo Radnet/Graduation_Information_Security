@@ -158,7 +158,6 @@ public class FrameNewUser extends JFrame{
 						e1.printStackTrace();
 					}
   		        }
-
   		    }
   		    
   		  });

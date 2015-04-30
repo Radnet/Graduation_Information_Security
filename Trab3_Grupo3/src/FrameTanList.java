@@ -136,7 +136,7 @@ public class FrameTanList extends JFrame {
                             // Block User
                             dao.BlockUser(User.GetUserObj().getLogin());
                             
-                            JOptionPane.showMessageDialog(ThisFrame, "One time password errada. Suas tentaivas acabaram. Usu�rio bloqueado por 2 minutos.");
+                            JOptionPane.showMessageDialog(ThisFrame, "One time password errada. Suas tentaivas acabaram. Usuario bloqueado por 2 minutos.");
                             
                             // Open Login frame
                             FrameLogin FM_Login = new FrameLogin("Etapa 1 - Login");
@@ -145,7 +145,7 @@ public class FrameTanList extends JFrame {
                             // Close this frame
                             ThisFrame.dispose();
                         } else {
-                            JOptionPane.showMessageDialog(ThisFrame, "One time password errada, voc� possui " + trys + " tentativas.");
+                            JOptionPane.showMessageDialog(ThisFrame, "One time password errada, voce possui " + trys + " tentativas.");
                         }
                     }
                 } catch (NoSuchAlgorithmException ex) {
