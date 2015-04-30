@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,11 +19,10 @@ import javax.swing.JTextPane;
 public class FrameNewUser extends JFrame{
 
 	public JFrame ThisFrame;
-	public byte[] Kpubbuffer = new byte[1024];
+	public byte[] Kpubbuffer;
 	
 	public JTextField TXT_UserName   ;
 	public JTextField TXT_UserLogin  ;
-	public JTextField TXT_UserGroup  ;
 	public JPasswordField TXT_UserPsw    ;
 	public JPasswordField TXT_UserPswConf;
 	public JTextField TXT_UserTanSize;
@@ -62,10 +62,12 @@ public class FrameNewUser extends JFrame{
   		
   		TXT_UserName     = new JTextField();
   		TXT_UserLogin    = new JTextField();
-  		TXT_UserGroup    = new JTextField();
   		TXT_UserPsw      = new JPasswordField();
   		TXT_UserPswConf  = new JPasswordField();
   		TXT_UserTanSize  = new JTextField();
+  		
+  		String[] opts = { "Usuario", "Administrador" };
+  		JComboBox<String> JCB_UserGroup    = new JComboBox<String> (opts);
   		
   		JButton BTN_NewUser = new JButton("Cadastrar");
   		JButton BTN_Chooser = new JButton(">");
@@ -98,11 +100,11 @@ public class FrameNewUser extends JFrame{
   		
   		TXT_UserName    .setBounds (160,125,350,25);
   		TXT_UserLogin   .setBounds (160,155,350,25);
-  		TXT_UserGroup   .setBounds (160,185,350,25);
+  		JCB_UserGroup   .setBounds (160,185,350,25);
   		TXT_UserPsw     .setBounds (160,215,350,25);
   		TXT_UserPswConf .setBounds (160,245,350,25);
   		BTN_Chooser     .setBounds (160,275, 50,25);
-  		TXT_UserTanSize .setBounds (160,305,350,25);
+  		TXT_UserTanSize .setBounds (160,305, 20,25);
   		
   		BTN_NewUser     .setBounds (160,345,100,25);
   		BUT_Back        .setBounds (300,345,100,25);
@@ -127,7 +129,7 @@ public class FrameNewUser extends JFrame{
   		
   		Panel.add(TXT_UserName);
   		Panel.add(TXT_UserLogin);
-  		Panel.add(TXT_UserGroup);
+  		Panel.add(JCB_UserGroup);
   		Panel.add(TXT_UserPsw);
   		Panel.add(TXT_UserPswConf);
   		Panel.add(BTN_Chooser);
@@ -209,6 +211,8 @@ public class FrameNewUser extends JFrame{
 	
 	public boolean IsAllFieldsOK()
 	{
+		Dao dao = new Dao();
+		
 		// empty verifications
 		if(TXT_UserName.getText().equals(""))
 		{
@@ -235,7 +239,7 @@ public class FrameNewUser extends JFrame{
 			ErrorMessage = "Por favor, preencha o Tamanho da TAN list do Usuario";
 			return false;
 		}
-		if(Kpubbuffer.length == 0)
+		if(Kpubbuffer == null)
 		{
 			ErrorMessage = "Por favor, selecione o caminho da chave publica do Usuario";
 			return false;
@@ -268,19 +272,53 @@ public class FrameNewUser extends JFrame{
 			return false;
 		}
 		
-		// Verify digits on tan list size
-		String tanSize = TXT_UserTanSize.getText();
-		tanSize.replaceAll("\\D++", "T");
-		if(tanSize.contains("T"))
+		// Verify alphabetic chars on password
+		String psw = TXT_UserPsw.getText();
+		psw = psw.replaceAll("\\D++", "T");
+		if(psw.contains("T"))
 		{
-			ErrorMessage = "Tamanho da TAN list deve conter apenas numeros";
+			ErrorMessage = "A senha deve conter apenas numeros";
 			return false;
+		}
+		
+		// Verify psw size
+		if(psw.length() < 8 || psw.length() > 10)
+		{
+			ErrorMessage = "A senha deve ter entre 8 e 10 digitos nao sequenciais";
+			return false;
+		}
+		
+		
+		// Verify sequences on password !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		for(int i=1 ; i < psw.length() ; i++)
+		{
+			if(Math.abs(psw.charAt(i) - psw.charAt(i-1)) == 1)
+			{
+				ErrorMessage = "A senha nao pode conter nenhum tipo de sequencia";
+				return false;
+			}
 		}
 		
 		// Verify is password is the same as the confirmation
 		if(! TXT_UserPsw.getText().equals(TXT_UserPswConf.getText()))
 		{
 			ErrorMessage = "Senha digitada esta diferente da confirmacao de senha";
+			return false;
+		}
+		
+		// Verify digits on tan list size
+		String tanSize = TXT_UserTanSize.getText();
+		tanSize = tanSize.replaceAll("\\D++", "T");
+		if(tanSize.contains("T"))
+		{
+			ErrorMessage = "Tamanho da TAN list deve conter apenas numeros";
+			return false;
+		}
+		
+		// Verify if login is in use already
+		if(dao.IsLoginInUse(TXT_UserLogin.getText()))
+		{
+			ErrorMessage = "O Login escolhido já está em uso, por favor escolha outro";
 			return false;
 		}
 		

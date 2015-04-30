@@ -520,4 +520,41 @@ public class Dao {
             }
         }
     }
+
+    public boolean IsLoginInUse(String Login)
+    {
+    	 String query = "SELECT count(*) as count FROM usuarios WHERE login = ?";
+         Connection con = getConnection();
+
+         try {
+             // Prepare query statement and avoid SQL injection
+             pstmt = con.prepareStatement(query);
+             pstmt.setString(1, Login);
+
+             // Execute query
+             rs = pstmt.executeQuery();
+
+             // Get first query return row
+             rs.next();
+
+             return rs.getInt("count") > 0;
+         } catch (SQLException e) {
+             System.out.println("Erro ao executar query de IsAdmin.");
+         } finally {
+             try {
+                 if (rs != null) {
+                     rs.close();
+                 }
+                 if (pstmt != null) {
+                     pstmt.close();
+                 }
+                 if (con != null) {
+                     con.close();
+                 }
+             } catch (SQLException ex) {
+                 System.out.println("Erro ao fechar conexões.");
+             }
+         }
+         return true;
+    }
 }
