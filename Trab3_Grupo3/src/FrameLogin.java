@@ -71,10 +71,15 @@ public class FrameLogin extends JFrame {
 
                 // Verify if Login Name exists
                 if (dao.IsLoginNameOK(user.getLogin())) {
+                    //Verify if user still has OTPs in TANList
+                    if (!dao.UserHasOTP(user.getLogin())){
+                        JOptionPane.showMessageDialog(ThisFrame, "O usuário não possui OTP válido na TANList!");
+                    }
                     // Verify if user is blocked
-                    if (dao.IsUserBlocked(user.getLogin())) {
-                        JOptionPane.showMessageDialog(ThisFrame, "O usu�rio foi bloqueado por 2 minutos. Aguarde a libera��o.");
-                    } else {
+                    else if (dao.IsUserBlocked(user.getLogin())) {
+                        JOptionPane.showMessageDialog(ThisFrame, "O usuário foi bloqueado por 2 minutos. Aguarde a liberacão.");
+                    } 
+                    else {
                         // Open password frame
                         FramePassword FM_Password = new FramePassword("Etapa 2 - Senha");
                         FM_Password.setVisible(true);
