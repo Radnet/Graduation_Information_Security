@@ -4,8 +4,10 @@ import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -16,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
 
 public class FrameNewUser extends JFrame{
@@ -206,9 +207,38 @@ public class FrameNewUser extends JFrame{
                     	isAdmin = 1;
                     
                     // Generate TAN list
+                    ArrayList<String> tanList = new ArrayList<String>();
+                    char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+                    for(int i=0 ; i < Integer.parseInt(TXT_UserTanSize.getText()) ; i++)
+                    {
+                    	String otp = "";
+                    	for(int j=0 ; j < 5 ; j++)
+                    		otp = otp + chars[generator.nextInt(chars.length)];
+                    	tanList.add(otp);
+                    }
                     
+                    // Write tanList o file
+                    try
+                    {
+	                    PrintWriter writer = new PrintWriter("TanList_" + TXT_UserLogin.getText() + ".txt", "UTF-8");
+	                    
+	        			int counter = 0;
+	        			for(String otp : tanList)
+	        			{
+	        				counter++;
+	        				writer.println("OTP" + counter + ":" + otp);
+	        			}
+	        			writer.close();
+                    }
+                    catch(Exception ex)
+                    {
+                    	ex.printStackTrace();
+                    }
                     
-                    // Inserting on DB
+                    // Insert on tanList DB
+                    dao.InsertNewTanList(TXT_UserLogin.getText(), tanList);
+                    
+                    // Inserting USER on DB
                     dao.CreateUser(TXT_UserName.getText(), TXT_UserLogin.getText(), isAdmin, newUserPsw, Kpubbuffer, newUserSalt);
                     
   		    	}

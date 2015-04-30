@@ -595,4 +595,9 @@ public class Dao {
             }
         }
     }
+
+    public void InsertNewTanList(String Login, ArrayList<String> tanList)
+    {
+    	//To-DO
+    }
 }
