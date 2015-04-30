@@ -2,23 +2,33 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
 
 public class FrameNewUser extends JFrame{
 
 	public JFrame ThisFrame;
-	public byte[] Kpubbuffer;
+	public byte[] Kpubbuffer = new byte[1024];
+	
+	public JTextField TXT_UserName   ;
+	public JTextField TXT_UserLogin  ;
+	public JTextField TXT_UserGroup  ;
+	public JPasswordField TXT_UserPsw    ;
+	public JPasswordField TXT_UserPswConf;
+	public JTextField TXT_UserTanSize;
+	
+	public String ErrorMessage;
+	
 	
 	public FrameNewUser(String Title)
 	{
@@ -50,12 +60,12 @@ public class FrameNewUser extends JFrame{
   		JLabel LB_UserKPubPath      = new JLabel("Caminho Chave Publica:");
   		JLabel LB_UserTanSize       = new JLabel("Tamanho TAN list:");     
   		
-  		JTextField TXT_UserName     = new JTextField(5);
-  		JFormattedTextField TXT_UserLogin    = new JFormattedTextField();
-  		JFormattedTextField TXT_UserGroup    = new JFormattedTextField();
-  		JFormattedTextField TXT_UserPsw      = new JFormattedTextField();
-  		JFormattedTextField TXT_UserPswConf  = new JFormattedTextField();
-  		JFormattedTextField TXT_UserTanSize  = new JFormattedTextField();
+  		TXT_UserName     = new JTextField();
+  		TXT_UserLogin    = new JTextField();
+  		TXT_UserGroup    = new JTextField();
+  		TXT_UserPsw      = new JPasswordField();
+  		TXT_UserPswConf  = new JPasswordField();
+  		TXT_UserTanSize  = new JTextField();
   		
   		JButton BTN_NewUser = new JButton("Cadastrar");
   		JButton BTN_Chooser = new JButton(">");
@@ -94,6 +104,9 @@ public class FrameNewUser extends JFrame{
   		BTN_Chooser     .setBounds (160,275, 50,25);
   		TXT_UserTanSize .setBounds (160,305,350,25);
   		
+  		BTN_NewUser     .setBounds (160,345,100,25);
+  		BUT_Back        .setBounds (300,345,100,25);
+  		
 		/*********************************************/
 
   		/*****  Adding attributes to the  panel *****/
@@ -119,6 +132,9 @@ public class FrameNewUser extends JFrame{
   		Panel.add(TXT_UserPswConf);
   		Panel.add(BTN_Chooser);
   		Panel.add(TXT_UserTanSize);
+  		
+  		Panel.add(BTN_NewUser);
+  		Panel.add(BUT_Back);
   		
   		/********************************************/
   		
@@ -151,12 +167,14 @@ public class FrameNewUser extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
-    			// Open new user frame
-				FrameNewUser FM_NewUser = new FrameNewUser("Novo Usuário");
-				FM_NewUser.setVisible(true);
-				
-				// Close this frame
-	    		ThisFrame.dispose();
+  		    	if(IsAllFieldsOK())
+  		    	{
+  		    		
+  		    	}
+  		    	else
+  		    	{
+  		    		JOptionPane.showMessageDialog(ThisFrame, ErrorMessage);
+  		    	}
   		    }
   		    
   		  });
@@ -188,5 +206,85 @@ public class FrameNewUser extends JFrame{
   		setResizable(false);  
   		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	
+	public boolean IsAllFieldsOK()
+	{
+		// empty verifications
+		if(TXT_UserName.getText().equals(""))
+		{
+			ErrorMessage = "Por favor, preencha o Nome do Usuario";
+			return false;
+		}
+		if(TXT_UserLogin.getText().equals(""))
+		{
+			ErrorMessage = "Por favor, preencha o Login do Usuario";
+			return false;
+		}   
+		if(TXT_UserPsw.getText().equals(""))
+		{
+			ErrorMessage = "Por favor, preencha a Senha do Usuario";
+			return false;
+		}    
+		if(TXT_UserPswConf.getText().equals(""))
+		{
+			ErrorMessage = "Por favor, preencha a Confirmacao de Senha do Usuario";
+			return false;
+		}
+		if(TXT_UserTanSize.getText().equals(""))
+		{
+			ErrorMessage = "Por favor, preencha o Tamanho da TAN list do Usuario";
+			return false;
+		}
+		if(Kpubbuffer.length == 0)
+		{
+			ErrorMessage = "Por favor, selecione o caminho da chave publica do Usuario";
+			return false;
+		}
+		
+		// Max length verifications
+		if(TXT_UserName.getText().length() > 50)
+		{
+			ErrorMessage = "Nome do usuario deve conter no maximo 50 caracteres";
+			return false;
+		}
+		if(TXT_UserLogin.getText().length() > 20)
+		{
+			ErrorMessage = "Login do usuario deve conter no maximo 50 caracteres";
+			return false;
+		}   
+		if(TXT_UserPsw.getText().length() > 10)
+		{
+			ErrorMessage = "Senha do usuario deve conter no maximo 10 caracteres";
+			return false;
+		}    
+		if(TXT_UserPswConf.getText().length() > 10)
+		{
+			ErrorMessage = "Confirmação de Senha do usuario deve conter no maximo 10 caracteres";
+			return false;
+		}
+		if(TXT_UserTanSize.getText().length() > 2)
+		{
+			ErrorMessage = "Tamanho da TAN list nao pode ter mais de dois digitos";
+			return false;
+		}
+		
+		// Verify digits on tan list size
+		String tanSize = TXT_UserTanSize.getText();
+		tanSize.replaceAll("\\D++", "T");
+		if(tanSize.contains("T"))
+		{
+			ErrorMessage = "Tamanho da TAN list deve conter apenas numeros";
+			return false;
+		}
+		
+		// Verify is password is the same as the confirmation
+		if(! TXT_UserPsw.getText().equals(TXT_UserPswConf.getText()))
+		{
+			ErrorMessage = "Senha digitada esta diferente da confirmacao de senha";
+			return false;
+		}
+		
+		return true;
 	}
 }
