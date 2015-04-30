@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -172,6 +174,29 @@ public class FrameNewUser extends JFrame{
   		    	if(IsAllFieldsOK())
   		    	{
   		    		// OK, create new user
+  		    		
+  		    		// Generate Random STRING Salt with 9 digits
+  		    		String newUserSalt = "";
+  		    		Random generator = new Random();
+  		    		for(int i=0 ; i< 9 ; i++)
+  		    		{
+  		    			newUserSalt = newUserSalt + generator.nextInt(10);
+  		    		}
+  		    		
+  		    		// Hash psw with salt
+  		    		MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+                    messageDigest.update((TXT_UserPsw.getText() + newUserSalt).getBytes());
+                    byte[] pwDigest = messageDigest.digest();
+                    
+                    // Converting to hexadecimal
+                    String newUserPsw = SharedLibrary.GetHexadecimal(pwDigest);
+                    
+                    // Get group
+                    String group = "0";
+                    if(JCB_UserGroup.getSelectedItem().toString().equals("Administrador"))
+	                    group = "1";
+                    
+  		    		
   		    	}
   		    	else
   		    	{
