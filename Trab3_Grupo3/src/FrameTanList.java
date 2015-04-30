@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,10 +75,22 @@ public class FrameTanList extends JFrame {
          * **********************************************************
          */
         /**
-         * ********Random one of the Otps from list*******************
+         * ********Random one of the Otps *******************
          */
-        final int OTPposition_index = SharedLibrary.randInt(0, OtpList.size() - 1);
-        int OTPposition = OTPposition_index + 1;
+        
+        //Map unused OTPs with respective indexes
+        final Map<Integer,String> hm = new HashMap<>();
+        
+        int count = 1;
+        for(String otp : OtpList){
+            if(!otp.equals("used")) hm.put(count, otp);
+            count++;
+        }
+        
+        Random generator = new Random();
+        Object[] values = hm.keySet().toArray();
+        final Integer OTPposition = (Integer) values[generator.nextInt(values.length)];
+        
         LB_OneTimePsw.setText("Digite a OTP " + OTPposition + ": ");
 
         /**
@@ -98,10 +113,13 @@ public class FrameTanList extends JFrame {
                     
                     String oneTimeHex = SharedLibrary.GetHexadecimal(oneTimeDigest);
                     
-                    // VERIFY OTP
-                    if (OtpList.get(OTPposition_index).equals(oneTimeHex)) {
+                    // VERIFY OTP map
+                    if (hm.get(OTPposition).equals(oneTimeHex)) {
                         // Increment access count
                         dao.IncrementAccess(UserLogin);
+                        
+                        // Update the TAN List
+                        dao.RemoveTAN(UserLogin,OtpList,OTPposition - 1);
                         
                         // Fill user props from the db infos
                         SharedLibrary.FillUserProps(UserLogin);
