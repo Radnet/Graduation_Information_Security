@@ -168,9 +168,10 @@ public class FrameNewUser extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+  		    	// Verify errors on form
   		    	if(IsAllFieldsOK())
   		    	{
-  		    		
+  		    		// OK, create new user
   		    	}
   		    	else
   		    	{
@@ -288,8 +289,7 @@ public class FrameNewUser extends JFrame{
 			return false;
 		}
 		
-		
-		// Verify sequences on password !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// Verify sequences on password
 		for(int i=1 ; i < psw.length() ; i++)
 		{
 			if(Math.abs(psw.charAt(i) - psw.charAt(i-1)) == 1)
