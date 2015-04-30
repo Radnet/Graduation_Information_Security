@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import javax.sql.rowset.serial.SerialBlob;
+
 public class Dao {
 
     private String url;
@@ -79,7 +81,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
     }
@@ -188,7 +190,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
         return "";
@@ -294,7 +296,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
         return responseList;
@@ -330,7 +332,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
         return false;
@@ -358,7 +360,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
     }
@@ -393,7 +395,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
         return "";
@@ -429,7 +431,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
         return 0;
@@ -556,5 +558,41 @@ public class Dao {
              }
          }
          return true;
+    }
+    
+    public void CreateUser(String name, String login, int isAdmin, String password, byte[] pubkey, String salt ) {
+        Connection con = getConnection();
+
+        try {
+        	
+            String insertString = "INSERT INTO usuarios VALUES (?,?,?,?,?,?, 0, 0, 0)";
+            pstmt = con.prepareStatement(insertString);
+            
+            pstmt.setString(1, name);
+            pstmt.setString(2, login);
+            pstmt.setInt   (3, isAdmin);
+            pstmt.setString(4, password);
+            pstmt.setBytes (5, pubkey);
+            pstmt.setString(6, salt);
+            
+            pstmt.execute();
+            
+        } catch (SQLException e) {
+            System.out.println("Erro ao executar insert de CreateUser.");
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println("Erro ao fechar conexões.");
+            }
+        }
     }
 }

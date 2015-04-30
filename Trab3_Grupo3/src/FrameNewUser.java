@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -184,19 +185,32 @@ public class FrameNewUser extends JFrame{
   		    		}
   		    		
   		    		// Hash psw with salt
-  		    		MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-                    messageDigest.update((TXT_UserPsw.getText() + newUserSalt).getBytes());
-                    byte[] pwDigest = messageDigest.digest();
-                    
-                    // Converting to hexadecimal
-                    String newUserPsw = SharedLibrary.GetHexadecimal(pwDigest);
+  		    		MessageDigest messageDigest;
+  		    		String newUserPsw = "";
+					try {
+						
+						messageDigest = MessageDigest.getInstance("MD5");
+						messageDigest.update((TXT_UserPsw.getText() + newUserSalt).getBytes());
+						byte[] pwDigest = messageDigest.digest();
+						
+						// Converting to hexadecimal
+	                    newUserPsw = SharedLibrary.GetHexadecimal(pwDigest);
+						
+					} catch (NoSuchAlgorithmException e1) {
+						e1.printStackTrace();
+					}
                     
                     // Get group
-                    String group = "0";
+                    int isAdmin = 0;
                     if(JCB_UserGroup.getSelectedItem().toString().equals("Administrador"))
-	                    group = "1";
+                    	isAdmin = 1;
                     
-  		    		
+                    // Generate TAN list
+                    
+                    
+                    // Inserting on DB
+                    dao.CreateUser(TXT_UserName.getText(), TXT_UserLogin.getText(), isAdmin, newUserPsw, Kpubbuffer, newUserSalt);
+                    
   		    	}
   		    	else
   		    	{
