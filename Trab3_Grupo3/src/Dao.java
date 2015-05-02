@@ -1,4 +1,5 @@
 
+import java.security.PublicKey;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -725,4 +726,42 @@ public class Dao {
             }
         }
     }
+
+	public byte[] getKpub(String Login) {
+		 String query = "SELECT pubkey FROM usuarios WHERE login = ?";
+	        Connection con = getConnection();
+	        try {
+	            // Prepare query statement and avoid SQL injection
+	            pstmt = con.prepareStatement(query);
+	            pstmt.setString(1, Login);
+
+	            // Execute query
+	            rs = pstmt.executeQuery();
+
+	            // Get first query return row
+	            rs.next();
+
+	            // Verify if the user exists on DB and close the result set
+	            return rs.getBytes("pubkey");
+	            
+	        } catch (SQLException e) {
+	            System.out.println("Erro ao executar query de GetName.");
+	        } finally {
+	            try {
+	                if (rs != null) {
+	                    rs.close();
+	                }
+	                if (pstmt != null) {
+	                    pstmt.close();
+	                }
+	                if (con != null) {
+	                    con.close();
+	                }
+	            } catch (SQLException ex) {
+	                System.out.println("Erro ao fechar conexcoes.");
+	            }
+	        }
+        
+		return null;
+	}
 }

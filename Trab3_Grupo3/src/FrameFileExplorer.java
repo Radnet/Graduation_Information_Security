@@ -1,12 +1,26 @@
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -16,18 +30,28 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import sun.security.x509.X509AttributeName;
+
 
 
 public class FrameFileExplorer extends JFrame{
 
 	public JFrame ThisFrame;
 	public Container Panel;
-	public byte[] Kprivbuffer;
+	public byte[] KprivFileBuffer;
 	public File FilePath;
+	
+	public File IndexEnv;
+	public File IndexAss;
+	public File IndexEnc;
 	
 	public JPasswordField TXT_SecretPhrase   ;
 	
 	public String ErrorMessage;
+	
+	User user = User.GetUserObj();
+	
+	Dao dao = new Dao();
 	
 	public FrameFileExplorer(String Title)
 	{
@@ -35,9 +59,6 @@ public class FrameFileExplorer extends JFrame{
 		ThisFrame = this;
 		setLayout(null);
 		
-		User user = User.GetUserObj();
-		
-		Dao dao = new Dao();
 		
 		/*****  Setting the attributes of the Frame *****/
 		
@@ -124,10 +145,10 @@ public class FrameFileExplorer extends JFrame{
   		    {
   		      if (KprivChooser.showOpenDialog(ThisFrame) == JFileChooser.APPROVE_OPTION) { 
   		    	  	try {
-  		    	  		Kprivbuffer = new byte[1024];
+  		    	  		KprivFileBuffer = new byte[1024];
   		    	  		
 						InputStream is = new FileInputStream(KprivChooser.getSelectedFile());
-						is.read(Kprivbuffer);
+						is.read(KprivFileBuffer);
 						
 						is.close();
 						
@@ -176,27 +197,43 @@ public class FrameFileExplorer extends JFrame{
   		    	// Verify fields
   		    	if(IsAllFieldsOK())
   		    	{
-  		    	
-			    	// Increment consult on DB
-			    	dao.IncrementConsult(user.getLogin());
-			    	LB_Consults.setText("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
-			    	
-			    	// 
-			    	
-			    	
-			    	String[] columnNames = {"Nome", "Hexa AssD", "Hexa EnvD", "Status"};
-			    	
-			  		Object[][] data = {	};
-			  		
-			    	JTable table = new JTable(data, columnNames);
-			    	table.setFillsViewportHeight(true);
-			    	JScrollPane scrollPane = new JScrollPane(table);
-			    	scrollPane.setBounds (10,260,780,300);
-			    	Panel.add(scrollPane);
-			    	
-			    	
-			    	Panel.revalidate();
-			    	Panel.repaint();
+  		    		try
+  		    		{
+				    	// Increment consult on DB
+				    	dao.IncrementConsult(user.getLogin());
+				    	LB_Consults.setText("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
+				    	
+				    	// Get Private key
+				    	PrivateKey Kpriv       = GetPrivateKey(TXT_SecretPhrase.getText(), KprivFileBuffer);
+				    	SecretKey  symetricKey = GetSymetricKey(Kpriv, IndexEnv);
+				    	
+				    	// Verify Signature
+				    	if(VerifySignature(IndexEnc, IndexAss ))
+				    	{
+				    		String[] columnNames = {"Nome", "Hexa AssD", "Hexa EnvD", "Status"};
+					    	
+					  		Object[][] data = {	};
+					  		
+					    	JTable table = new JTable(data, columnNames);
+					    	table.setFillsViewportHeight(true);
+					    	JScrollPane scrollPane = new JScrollPane(table);
+					    	scrollPane.setBounds (10,260,780,300);
+					    	Panel.add(scrollPane);
+					    	
+					    	
+					    	Panel.revalidate();
+					    	Panel.repaint();
+				    	}
+				    	else
+				    	{
+				    		JOptionPane.showMessageDialog(ThisFrame, "O arquivo Inde.enc nao passou no teste de integridade/autenticidade");
+				    	}
+				    	
+  		    		}
+  		    		catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
   		    	}
   		    	else
   		    	{
@@ -204,6 +241,7 @@ public class FrameFileExplorer extends JFrame{
   		    	}
   		    	
   		    }
+
 		  });
   	
   		/****************************************************************/
@@ -223,7 +261,7 @@ public class FrameFileExplorer extends JFrame{
 	
 	public boolean IsAllFieldsOK()
 	{
-		if(Kprivbuffer == null)
+		if(KprivFileBuffer == null)
 		{
 			ErrorMessage = "Por favor, selecione o caminho da chave privada";
 			return false;
@@ -239,11 +277,146 @@ public class FrameFileExplorer extends JFrame{
 			return false;
 		}
 		
+		// Verify if the 3 index files are on the specified directory
+		IndexEnv = new File(FilePath.getAbsolutePath() + "\\index.env");
+		if(!IndexEnv.exists())
+		{
+			ErrorMessage = "index.env nao esta presente na pasta selecionada";
+			return false;
+		}
+		IndexAss = new File(FilePath.getAbsolutePath() + "\\index.ass");
+		if(!IndexAss.exists())
+		{
+			ErrorMessage = "index.ass nao esta presente na pasta selecionada";
+			return false;
+		}
+		IndexEnc = new File(FilePath.getAbsolutePath() + "\\index.enc");
+		if(!IndexEnc.exists())
+		{
+			ErrorMessage = "index.enc nao esta presente na pasta selecionada";
+			return false;
+		}
+		
 		return true;
 	}
 	
-	public PrivateKey GetPrivateKey()
+	public PrivateKey GetPrivateKey(String secretPhrase, byte[] buffer)
 	{
+		try 
+		{	
+			// Generate symmetric DES key from the secretPhrase 
+			
+			SecureRandom prng = new SecureRandom(secretPhrase.getBytes("UTF8"));
+			KeyGenerator keyGen = KeyGenerator.getInstance("DES", prng.getProvider());
+			
+			SecretKey prngKey = keyGen.generateKey();
+			
+			// define DES cipher object
+			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+			cipher.init(Cipher.DECRYPT_MODE, prngKey);
+			
+			// Decrypt private key file
+			byte[] KprivBytes = cipher.doFinal(buffer);
+			
+			KeyFactory kf = KeyFactory.getInstance("DES");
+			// For private keys use PKCS8EncodedKeySpec; for public keys use X509EncodedKeySpec
+			PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(KprivBytes);
+			return kf.generatePrivate(ks);
+					
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
+	
+	private SecretKey GetSymetricKey(PrivateKey Kpriv, File file) 
+	{
+		try 
+		{
+			// define DES cipher object
+			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+			cipher.init(Cipher.DECRYPT_MODE, Kpriv);
+			
+			// Decrypt private key file
+			InputStream is = new FileInputStream(file);
+			byte[] buffer = new byte[1024];
+			is.read(buffer);
+			is.close();
+			
+			byte[] symetricKeySEEDBytes = cipher.doFinal(buffer);
+			
+			SecureRandom prng = new SecureRandom(symetricKeySEEDBytes);
+			KeyGenerator keyGen = KeyGenerator.getInstance("DES", prng.getProvider());
+			
+			return keyGen.generateKey();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private PublicKey GetPublicKey(String login)
+	{
+		PublicKey kPub = null;
+		
+		try {
+			
+			KeyFactory kf = KeyFactory.getInstance("DES");
+			
+			// For private keys use PKCS8EncodedKeySpec; for public keys use X509EncodedKeySpec
+			X509EncodedKeySpec ks = new X509EncodedKeySpec(dao.getKpub(login));
+			kPub = kf.generatePublic(ks);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return kPub;
+	}
+	
+	private boolean VerifySignature(File EncFile, File AsdFile)
+	{
+		boolean response = false;
+		try
+		{
+			// Initialise Signature 
+			Signature sig = Signature.getInstance("MD5withDES");
+			sig.initVerify(GetPublicKey(user.getLogin()));
+			
+			// Supply the Signature
+			FileInputStream datafis = new FileInputStream(EncFile);
+			BufferedInputStream bufin = new BufferedInputStream(datafis);
+
+			byte[] buffer = new byte[1024];
+			int len;
+			while (bufin.available() != 0) {
+			    len = bufin.read(buffer);
+			    sig.update(buffer, 0, len);
+			};
+
+			bufin.close();
+			
+			// Get signature byte[]
+			byte[] signatureBytes = new byte[(int) AsdFile.length()];
+			FileInputStream fileInputStream=null;
+			//convert file into array of bytes
+		    fileInputStream = new FileInputStream(AsdFile);
+		    fileInputStream.read(signatureBytes);
+		    fileInputStream.close();
+			
+			// Verify
+			response = sig.verify(signatureBytes);
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
 }
