@@ -40,16 +40,16 @@ public class FrameNewUser extends JFrame{
 		
 		User user = User.GetUserObj();
 		
-		Dao dao = new Dao();
+		final Dao dao = new Dao();
 		
 		/*****  Setting the attributes of the Frame *****/
 		
 		//********** HEADER*******************************
   		JLabel LB_Login     = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo     = new JLabel("Grupo: " + user.getGrupo());
-  		JLabel LB_Decricao  = new JLabel("Descrição: " + user.getDescricao());
-  		JLabel LB_Access    = new JLabel("Total de Acessos: " + user.getAccess());
-  		JLabel LB_userForm  = new JLabel("Formulário de Cadastro");
+  		JLabel LB_Decricao  = new JLabel("DescriÃ§Ã£o: " + user.getDescricao());
+  		JLabel LB_Access    = new JLabel("Total de usuÃ¡rios no sistema: " + dao.NumberOfUsers());
+  		JLabel LB_userForm  = new JLabel("FormulÃ¡rio de Cadastro");
   		//************************************************
   		
   		//**************** FORM **************************
@@ -58,7 +58,7 @@ public class FrameNewUser extends JFrame{
   		JLabel LB_UserLogin         = new JLabel("Login:");                
   		JLabel LB_UserGroup         = new JLabel("Grupo:");                
   		JLabel LB_UserPsw           = new JLabel("Senha:");                
-  		JLabel LB_UserPswConf       = new JLabel("Confirmação de senha:"); 
+  		JLabel LB_UserPswConf       = new JLabel("ConfirmaÃ§Ã£o de senha:"); 
   		JLabel LB_UserKPubPath      = new JLabel("Caminho Chave Publica:");
   		JLabel LB_UserTanSize       = new JLabel("Tamanho TAN list:");     
   		
@@ -69,11 +69,11 @@ public class FrameNewUser extends JFrame{
   		TXT_UserTanSize  = new JTextField();
   		
   		String[] opts = { "Usuario", "Administrador" };
-  		JComboBox<String> JCB_UserGroup    = new JComboBox<String> (opts);
+  		final JComboBox<String> JCB_UserGroup    = new JComboBox<String> (opts);
   		
   		JButton BTN_NewUser = new JButton("Cadastrar");
   		JButton BTN_Chooser = new JButton(">");
-  		JButton BUT_Back = new JButton("Voltar");
+  		final JButton BUT_Back = new JButton("Voltar");
   		
   		final JFileChooser KpubChooser = new JFileChooser();
   		
@@ -335,7 +335,7 @@ public class FrameNewUser extends JFrame{
 		}    
 		if(TXT_UserPswConf.getText().length() > 10)
 		{
-			ErrorMessage = "Confirmação de Senha do usuario deve conter no maximo 10 caracteres";
+			ErrorMessage = "Confirmaï¿½ï¿½o de Senha do usuario deve conter no maximo 10 caracteres";
 			return false;
 		}
 		if(TXT_UserTanSize.getText().length() > 2)
@@ -389,7 +389,7 @@ public class FrameNewUser extends JFrame{
 		// Verify if login is in use already
 		if(dao.IsLoginInUse(TXT_UserLogin.getText()))
 		{
-			ErrorMessage = "O Login escolhido já está em uso, por favor escolha outro";
+			ErrorMessage = "O Login escolhido jï¿½ estï¿½ em uso, por favor escolha outro";
 			return false;
 		}
 		

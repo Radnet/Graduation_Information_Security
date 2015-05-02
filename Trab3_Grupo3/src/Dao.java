@@ -594,6 +594,41 @@ public class Dao {
             }
         }
     }
+    
+    public int NumberOfUsers(){
+        Connection con = getConnection();
+        try {
+            String query = "SELECT count(*) from USUARIOS";
+             // Prepare query statement and avoid SQL injection
+            pstmt = con.prepareStatement(query);
+            
+             // Execute query
+            rs = pstmt.executeQuery();
+            
+             // Get first query return row
+            rs.next();
+            
+            return rs.getInt(1);
+        }
+        catch(SQLException e){
+            System.out.println("Erro ao contar o número de usuários do sistema");
+        }finally {
+             try {
+                 if (rs != null) {
+                     rs.close();
+                 }
+                 if (pstmt != null) {
+                     pstmt.close();
+                 }
+                 if (con != null) {
+                     con.close();
+                 }
+             } catch (SQLException ex) {
+                 System.out.println("Erro ao fechar conexcoes.");
+             }
+        }
+        return 0;
+    }
 
     public void InsertNewTanList(String Login, String finalOtpString)
     {
