@@ -35,7 +35,7 @@ public class FrameFileExplorer extends JFrame{
   		JLabel LB_Login         = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo         = new JLabel("Grupo: " + user.getGrupo());
   		JLabel LB_Decricao      = new JLabel("Descrição: " + user.getDescricao());
-  		JLabel LB_Access        = new JLabel("Total de Consultas: " + user.getAccess());
+  		JLabel LB_Access        = new JLabel("Total de Consultas: " + dao.getUserConsults());
   		JLabel LB_ArchiveSystem = new JLabel("Sistema de Arquivos Secretos");
   		//************************************************
   		
@@ -45,13 +45,13 @@ public class FrameFileExplorer extends JFrame{
   		JLabel LB_SecretPhrase  = new JLabel("Frase Secreta:");                
   		JLabel LB_FolderPath    = new JLabel("Caminho da Pasta:");     
   		
-  		TXT_SecretPhrase     = new JTextField();  		
+  		TXT_SecretPhrase        = new JTextField();  		
   		
   		JButton BTN_ShowFiles    = new JButton("Listar");
   		JButton BTN_KprivChooser = new JButton(">");
   		JButton BTN_FileChooser  = new JButton(">");
   		
-  		JButton BUT_Back      = new JButton("Voltar");
+  		JButton BUT_Back         = new JButton("Voltar");
   		
   		final JFileChooser KpubChooser = new JFileChooser();
   		
@@ -107,7 +107,6 @@ public class FrameFileExplorer extends JFrame{
   		/*******************  Setting listeners *************************/
   		
   		BTN_KprivChooser.addActionListener( new ActionListener () {
-  			
   		    public void actionPerformed(ActionEvent e) 
   		    {
   		      if (KpubChooser.showOpenDialog(ThisFrame) == JFileChooser.APPROVE_OPTION) { 
@@ -129,7 +128,6 @@ public class FrameFileExplorer extends JFrame{
   		  });
   		
   		BTN_FileChooser.addActionListener( new ActionListener () {
-  			
   		    public void actionPerformed(ActionEvent e) 
   		    {
   		      if (KpubChooser.showOpenDialog(ThisFrame) == JFileChooser.APPROVE_OPTION) { 
@@ -151,7 +149,6 @@ public class FrameFileExplorer extends JFrame{
   		  });
   		
   		BUT_Back.addActionListener( new ActionListener () {
-  			
   		    public void actionPerformed(ActionEvent e) 
   		    {
     			// Open new user frame

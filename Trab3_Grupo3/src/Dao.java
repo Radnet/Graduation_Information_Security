@@ -154,7 +154,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
     }
@@ -225,7 +225,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
         return "";
@@ -254,7 +254,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
     }
@@ -473,7 +473,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
         return hasOTP;
@@ -517,7 +517,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
     }
@@ -553,7 +553,7 @@ public class Dao {
                      con.close();
                  }
              } catch (SQLException ex) {
-                 System.out.println("Erro ao fechar conexões.");
+                 System.out.println("Erro ao fechar conexcoes.");
              }
          }
          return true;
@@ -564,7 +564,7 @@ public class Dao {
 
         try {
         	
-            String insertString = "INSERT INTO usuarios VALUES (?,?,?,?,?,?, 0, 0, 0)";
+            String insertString = "INSERT INTO usuarios VALUES (?,?,?,?,?,?, 0, 0, 0, 0)";
             pstmt = con.prepareStatement(insertString);
             
             pstmt.setString(1, name);
@@ -590,7 +590,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexcoes.");
             }
         }
     }
@@ -611,7 +611,7 @@ public class Dao {
             return rs.getInt(1);
         }
         catch(SQLException e){
-            System.out.println("Erro ao contar o número de usuários do sistema");
+            System.out.println("Erro ao contar o numero de usuarios do sistema");
         }finally {
              try {
                  if (rs != null) {
@@ -660,4 +660,40 @@ public class Dao {
              }
          }
     }
+
+	public int getUserConsults(String Login) {
+		 Connection con = getConnection();
+	        try {
+	            String query = "SELECT consultas from USUARIOS where login = ?";
+	             // Prepare query statement and avoid SQL injection
+	            pstmt = con.prepareStatement(query);
+	            pstmt.setString(1, Login);
+	            
+	             // Execute query
+	            rs = pstmt.executeQuery();
+	            
+	             // Get first query return row
+	            rs.next();
+	            
+	            return rs.getInt(1);
+	        }
+	        catch(SQLException e){
+	            System.out.println("Erro ao contar o numero de usuarios do sistema");
+	        }finally {
+	             try {
+	                 if (rs != null) {
+	                     rs.close();
+	                 }
+	                 if (pstmt != null) {
+	                     pstmt.close();
+	                 }
+	                 if (con != null) {
+	                     con.close();
+	                 }
+	             } catch (SQLException ex) {
+	                 System.out.println("Erro ao fechar conexcoes.");
+	             }
+	        }
+	        return 0;
+	}
 }
