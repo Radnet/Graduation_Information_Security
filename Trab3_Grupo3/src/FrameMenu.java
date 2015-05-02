@@ -85,7 +85,12 @@ public class FrameMenu extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
-    			
+  		    	// Open folder frame
+				FrameFileExplorer FM_File = new FrameFileExplorer("Novo Usuário");
+				FM_File.setVisible(true);
+				
+				// Close this frame
+	    		ThisFrame.dispose();
   		    }
   		    
   		  });

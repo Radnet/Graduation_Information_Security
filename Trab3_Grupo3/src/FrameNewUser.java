@@ -47,9 +47,9 @@ public class FrameNewUser extends JFrame{
 		//********** HEADER*******************************
   		JLabel LB_Login     = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo     = new JLabel("Grupo: " + user.getGrupo());
-  		JLabel LB_Decricao  = new JLabel("Descrição: " + user.getDescricao());
-  		JLabel LB_Access    = new JLabel("Total de usuários no sistema: " + dao.NumberOfUsers());
-  		JLabel LB_userForm  = new JLabel("Formulário de Cadastro");
+  		JLabel LB_Decricao  = new JLabel("Descricao: " + user.getDescricao());
+  		JLabel LB_Access    = new JLabel("Total de usuarios no sistema: " + dao.NumberOfUsers());
+  		JLabel LB_userForm  = new JLabel("Formulario de Cadastro");
   		//************************************************
   		
   		//**************** FORM **************************
@@ -58,7 +58,7 @@ public class FrameNewUser extends JFrame{
   		JLabel LB_UserLogin         = new JLabel("Login:");                
   		JLabel LB_UserGroup         = new JLabel("Grupo:");                
   		JLabel LB_UserPsw           = new JLabel("Senha:");                
-  		JLabel LB_UserPswConf       = new JLabel("Confirmação de senha:"); 
+  		JLabel LB_UserPswConf       = new JLabel("Confirmacao de senha:"); 
   		JLabel LB_UserKPubPath      = new JLabel("Caminho Chave Publica:");
   		JLabel LB_UserTanSize       = new JLabel("Tamanho TAN list:");     
   		
@@ -389,7 +389,7 @@ public class FrameNewUser extends JFrame{
 		// Verify if login is in use already
 		if(dao.IsLoginInUse(TXT_UserLogin.getText()))
 		{
-			ErrorMessage = "O Login escolhido j� est� em uso, por favor escolha outro";
+			ErrorMessage = "O Login escolhido ja esta em uso, por favor escolha outro";
 			return false;
 		}
 		
