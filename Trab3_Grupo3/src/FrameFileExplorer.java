@@ -9,12 +9,15 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 
 public class FrameFileExplorer extends JFrame{
 
 	public JFrame ThisFrame;
+	public Container Panel;
 	public byte[] Kprivbuffer;
 	
 	public JTextField TXT_SecretPhrase   ;
@@ -35,7 +38,7 @@ public class FrameFileExplorer extends JFrame{
   		JLabel LB_Login         = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo         = new JLabel("Grupo: " + user.getGrupo());
   		JLabel LB_Decricao      = new JLabel("Descrição: " + user.getDescricao());
-  		JLabel LB_Access        = new JLabel("Total de Consultas: " + dao.getUserConsults());
+  		JLabel LB_Access        = new JLabel("Total de Consultas: " + dao.getUserConsults(user.getLogin()));
   		JLabel LB_ArchiveSystem = new JLabel("Sistema de Arquivos Secretos");
   		//************************************************
   		
@@ -51,7 +54,7 @@ public class FrameFileExplorer extends JFrame{
   		JButton BTN_KprivChooser = new JButton(">");
   		JButton BTN_FileChooser  = new JButton(">");
   		
-  		JButton BUT_Back         = new JButton("Voltar");
+  		JButton BTN_Back         = new JButton("Voltar");
   		
   		final JFileChooser KpubChooser = new JFileChooser();
   		
@@ -60,7 +63,7 @@ public class FrameFileExplorer extends JFrame{
   		
 		/***********************************************/
   		
-  		Container Panel =  getContentPane();
+  		Panel =  getContentPane();
   		
   		/*****  Adjusting the size of attributes *****/
   		
@@ -78,8 +81,8 @@ public class FrameFileExplorer extends JFrame{
   		TXT_SecretPhrase .setBounds (160,155,350,25);
   		BTN_FileChooser  .setBounds (160,185,50,25);
   		
-  		BTN_ShowFiles    .setBounds (160,345,100,25);
-  		BUT_Back         .setBounds (300,345,100,25);
+  		BTN_ShowFiles    .setBounds (10 ,220,100,25);
+  		BTN_Back         .setBounds (120,220,100,25);
   		
 		/*********************************************/
 
@@ -100,7 +103,7 @@ public class FrameFileExplorer extends JFrame{
   		Panel.add(BTN_FileChooser);
   		
   		Panel.add(BTN_ShowFiles);
-  		Panel.add(BUT_Back);
+  		Panel.add(BTN_Back);
   		
   		/********************************************/
   		
@@ -148,7 +151,7 @@ public class FrameFileExplorer extends JFrame{
   		    
   		  });
   		
-  		BUT_Back.addActionListener( new ActionListener () {
+  		BTN_Back.addActionListener( new ActionListener () {
   		    public void actionPerformed(ActionEvent e) 
   		    {
     			// Open new user frame
@@ -160,6 +163,26 @@ public class FrameFileExplorer extends JFrame{
   		    }
   		    
   		  });
+  		
+  		BTN_ShowFiles.addActionListener( new ActionListener () {
+  		    public void actionPerformed(ActionEvent e) 
+  		    {
+  		    	String[] columnNames = {"Nome", "Hexa AssD", "Hexa EnvD"};
+  		    	
+		  		Object[][] data = {	};
+		  		
+  		    	JTable table = new JTable(data, columnNames);
+  		    	table.setFillsViewportHeight(true);
+  		    	JScrollPane scrollPane = new JScrollPane(table);
+  		    	scrollPane.setBounds (10,260,780,300);
+  		    	Panel.add(scrollPane);
+  		    	
+  		    	
+  		    	Panel.revalidate();
+  		    	Panel.repaint();
+  		    	
+  		    }
+		  });
   	
   		/****************************************************************/
   	
