@@ -596,34 +596,8 @@ public class Dao {
         }
     }
 
-    public void InsertNewTanList(String Login, String finalOtpString)
+    public void InsertNewTanList(String Login, ArrayList<String> tanList)
     {
-    	 Connection con = getConnection();
-    	    
-         try {
-        	 String insertString = "INSERT INTO tanLists VALUES (?,?)";
-             pstmt = con.prepareStatement(insertString);
-             
-             pstmt.setString(1, Login);
-             pstmt.setString(2, finalOtpString);
-             
-             pstmt.execute();
-         } catch (SQLException e) {
-             System.out.println("Erro ao executar query de IncrementAccess.");
-         } finally {
-             try {
-                 if (rs != null) {
-                     rs.close();
-                 }
-                 if (pstmt != null) {
-                     pstmt.close();
-                 }
-                 if (con != null) {
-                     con.close();
-                 }
-             } catch (SQLException ex) {
-                 System.out.println("Erro ao fechar conexcoes.");
-             }
-         }
+    	//To-DO
     }
 }

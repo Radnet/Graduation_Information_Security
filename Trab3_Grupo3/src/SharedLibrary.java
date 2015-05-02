@@ -1,5 +1,3 @@
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 
@@ -42,26 +40,6 @@ public class SharedLibrary {
 			buf.append((hex.length() < 2 ? "0" : "") + hex);
 		}
 		return buf.toString();
-	}
-	
-	public static String HashWithSalt(String toBeHashed, String Salt)
-	{
-		String result = "";
-		MessageDigest messageDigest;
-		try {
-			
-			messageDigest = MessageDigest.getInstance("MD5");
-			messageDigest.update((toBeHashed + Salt).getBytes());
-			byte[] pwDigest = messageDigest.digest();
-			
-			// Converting to hexadecimal
-			result = SharedLibrary.GetHexadecimal(pwDigest);
-			
-		} catch (NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
-		}
-		
-		return result;
 	}
 
 }
