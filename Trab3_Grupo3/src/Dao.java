@@ -661,7 +661,7 @@ public class Dao {
          }
     }
 
-	public int getUserConsults(String Login) {
+	public int GetUserConsults(String Login) {
 		 Connection con = getConnection();
 	        try {
 	            String query = "SELECT consultas from USUARIOS where login = ?";
@@ -696,4 +696,33 @@ public class Dao {
 	        }
 	        return 0;
 	}
+	
+	public void IncrementConsult(String Login) {
+        Connection con = getConnection();
+
+        try {
+        	
+            String updateString = "UPDATE usuarios SET  consultas = consultas + 1  WHERE login = ?";
+            pstmt = con.prepareStatement(updateString);
+            pstmt.setString(1, Login);
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Erro ao executar query de IncrementConsult.");
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println("Erro ao fechar conexcoes.");
+            }
+        }
+    }
 }

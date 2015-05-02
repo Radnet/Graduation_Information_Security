@@ -38,7 +38,7 @@ public class FrameFileExplorer extends JFrame{
   		JLabel LB_Login         = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo         = new JLabel("Grupo: " + user.getGrupo());
   		JLabel LB_Decricao      = new JLabel("Descrição: " + user.getDescricao());
-  		JLabel LB_Access        = new JLabel("Total de Consultas: " + dao.getUserConsults(user.getLogin()));
+  		JLabel LB_Consults        = new JLabel("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
   		JLabel LB_ArchiveSystem = new JLabel("Sistema de Arquivos Secretos");
   		//************************************************
   		
@@ -70,7 +70,7 @@ public class FrameFileExplorer extends JFrame{
   		LB_Login         .setBounds (10,5,  350,25);
   		LB_Grupo         .setBounds (10,25, 350,25);
   		LB_Decricao      .setBounds (10,45, 350,25);
-  		LB_Access        .setBounds (10,65, 350,25);
+  		LB_Consults        .setBounds (10,65, 350,25);
   		LB_ArchiveSystem .setBounds (10,105,350,25);
   		                
   		LB_UserKPrivPath .setBounds (10,125,350,25);    
@@ -91,7 +91,7 @@ public class FrameFileExplorer extends JFrame{
   		Panel.add(LB_Login);
   		Panel.add(LB_Grupo);
   		Panel.add(LB_Decricao);
-  		Panel.add(LB_Access);
+  		Panel.add(LB_Consults);
   		Panel.add(LB_ArchiveSystem);
   		   
   		Panel.add(LB_SecretPhrase);   
@@ -167,6 +167,10 @@ public class FrameFileExplorer extends JFrame{
   		BTN_ShowFiles.addActionListener( new ActionListener () {
   		    public void actionPerformed(ActionEvent e) 
   		    {
+  		    	// Increment consult on DB
+  		    	dao.IncrementConsult(user.getLogin());
+  		    	LB_Consults.setText("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
+  		    	
   		    	String[] columnNames = {"Nome", "Hexa AssD", "Hexa EnvD"};
   		    	
 		  		Object[][] data = {	};
