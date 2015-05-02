@@ -204,7 +204,7 @@ public class FramePassword extends JFrame {
                         // Block User
                         dao.BlockUser(User.GetUserObj().getLogin());
 
-                        JOptionPane.showMessageDialog(ThisFrame, "Senha errada. Suas tentaivas acabaram. Usu�rio bloqueado por 2 minutos.");
+                        JOptionPane.showMessageDialog(ThisFrame, "Senha errada. Suas tentaivas acabaram. Usuario bloqueado por 2 minutos.");
 
                         // Open Login frame
                         FrameLogin FM_Login = new FrameLogin("Etapa 1 - Login");
@@ -213,7 +213,7 @@ public class FramePassword extends JFrame {
                         // Close this frame
                         ThisFrame.dispose();
                     } else {
-                        JOptionPane.showMessageDialog(ThisFrame, "Senha errada, voc� possui " + trys + " tentativas.");
+                        JOptionPane.showMessageDialog(ThisFrame, "Senha errada, voce possui " + trys + " tentativas.");
                     }
                 }
 

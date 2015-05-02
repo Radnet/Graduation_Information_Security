@@ -186,21 +186,8 @@ public class FrameNewUser extends JFrame{
   		    		}
   		    		
   		    		// Hash psw with salt
-  		    		MessageDigest messageDigest;
-  		    		String newUserPsw = "";
-					try {
-						
-						messageDigest = MessageDigest.getInstance("MD5");
-						messageDigest.update((TXT_UserPsw.getText() + newUserSalt).getBytes());
-						byte[] pwDigest = messageDigest.digest();
-						
-						// Converting to hexadecimal
-	                    newUserPsw = SharedLibrary.GetHexadecimal(pwDigest);
-						
-					} catch (NoSuchAlgorithmException e1) {
-						e1.printStackTrace();
-					}
-                    
+  		    		String newUserPsw = SharedLibrary.HashWithSalt(TXT_UserPsw.getText(), newUserSalt);
+
                     // Get group
                     int isAdmin = 0;
                     if(JCB_UserGroup.getSelectedItem().toString().equals("Administrador"))
@@ -235,11 +222,28 @@ public class FrameNewUser extends JFrame{
                     	ex.printStackTrace();
                     }
                     
+                    // Mount tanList string
+                    String finalOtpString = "";
+               	 
+	               	// Transform ArrayList into string comma delimited
+	               	for(String otp : tanList)
+	               	{
+	               		String hashedOtp = SharedLibrary.HashWithSalt(otp, newUserSalt);
+	               		finalOtpString = finalOtpString + hashedOtp + ",";
+	               	}
+	                // Remove last comma
+	               	finalOtpString = finalOtpString.substring(0,finalOtpString.length()-1);
+                    
                     // Insert on tanList DB
-                    dao.InsertNewTanList(TXT_UserLogin.getText(), tanList);
+                    dao.InsertNewTanList(TXT_UserLogin.getText(), finalOtpString);
                     
                     // Inserting USER on DB
                     dao.CreateUser(TXT_UserName.getText(), TXT_UserLogin.getText(), isAdmin, newUserPsw, Kpubbuffer, newUserSalt);
+                    
+                    JOptionPane.showMessageDialog(ThisFrame, "Novo usuario criado com sucesso!");
+                    
+                    // Back to main menu 
+                    BUT_Back.doClick();
                     
   		    	}
   		    	else

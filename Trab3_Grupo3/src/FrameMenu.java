@@ -44,8 +44,9 @@ public class FrameMenu extends JFrame{
   		LB_Decricao.setBounds (10,45, 350,25);
   		LB_Access.setBounds   (10,65, 350,25);
   		LB_MainMenu.setBounds (10,105,350,25);
-  		                              
-  		BUT_NewUser.setBounds (10,130,350,25);
+  		
+  		if(user.isAdmin())
+  			BUT_NewUser.setBounds (10,130,350,25);
   		BUT_Folder.setBounds  (10,155,350,25);
   		BUT_Exit.setBounds    (10,180,350,25);
   		
