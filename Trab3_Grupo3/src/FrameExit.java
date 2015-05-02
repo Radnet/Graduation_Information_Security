@@ -8,11 +8,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 
-public class FrameMenu extends JFrame{
+public class FrameExit extends JFrame{
 
 	public JFrame ThisFrame;
 	
-	public FrameMenu(String Title)
+	public FrameExit(String Title)
 	{
 		super(Title);
 		ThisFrame = this;
@@ -24,13 +24,12 @@ public class FrameMenu extends JFrame{
 		
   		JLabel LB_Login     = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo     = new JLabel("Grupo: " + user.getGrupo());
-  		JLabel LB_Decricao  = new JLabel("Descrição: " + user.getDescricao());
+  		JLabel LB_Decricao  = new JLabel("Nome: " + user.getDescricao());
   		JLabel LB_Access    = new JLabel("Total de Acessos: " + user.getAccess());
-  		JLabel LB_MainMenu  = new JLabel("Menu Principal:");
+  		JLabel LB_MainMenu  = new JLabel("Pressione o botao Sair para confirmar");
   		
-  		JButton BUT_NewUser = new JButton("1 - Cadastrar Novo Usuário");
-  		JButton BUT_Folder  = new JButton("2 - Consultar Pasta de Arquivos Secretos do Usuário");
-  		JButton BUT_Exit    = new JButton("3 - Sair do Sistema");
+  		JButton BTN_Exit = new JButton("Sair");
+  		JButton BTN_Back = new JButton("Voltar ao Menu");
   		
 		/***********************************************/
   		
@@ -44,10 +43,8 @@ public class FrameMenu extends JFrame{
   		LB_Access.setBounds   (10,65, 350,25);
   		LB_MainMenu.setBounds (10,105,350,25);
   		
-  		if(user.isAdmin())
-  			BUT_NewUser.setBounds (10,130,350,25);
-  		BUT_Folder.setBounds  (10,155,350,25);
-  		BUT_Exit.setBounds    (10,180,350,25);
+  		BTN_Exit.setBounds    (10,130,350,25);
+  		BTN_Back.setBounds    (10,155,350,25);
   		
 		/*********************************************/
 
@@ -59,55 +56,40 @@ public class FrameMenu extends JFrame{
   		Panel.add(LB_Access);
   		Panel.add(LB_MainMenu);
   		
-  		Panel.add(BUT_NewUser);
-  		Panel.add(BUT_Folder);
-  		Panel.add(BUT_Exit);
+  		Panel.add(BTN_Exit);
+  		Panel.add(BTN_Back);
   		
   		/********************************************/
   		
   		/*******************  Setting listeners *************************/
   	
-  		BUT_NewUser.addActionListener( new ActionListener () {
+  		BTN_Exit.addActionListener( new ActionListener () {
+  			
+  		    public void actionPerformed(ActionEvent e) 
+  		    {
+  		    	// Close this frame
+	    		ThisFrame.dispose();
+	    		
+	    		// End program
+	    		System.exit(0);
+  		    }
+  		    
+  		  });
+  		
+  		BTN_Back.addActionListener( new ActionListener () {
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
     			// Open new user frame
-				FrameNewUser FM_NewUser = new FrameNewUser("Novo Usuário");
-				FM_NewUser.setVisible(true);
+				FrameMenu FM_Menu = new FrameMenu("Frame Menu");
+				FM_Menu.setVisible(true);
 				
 				// Close this frame
 	    		ThisFrame.dispose();
   		    }
   		    
   		  });
-  		
-  		BUT_Folder.addActionListener( new ActionListener () {
-  			
-  		    public void actionPerformed(ActionEvent e) 
-  		    {
-  		    	// Open folder frame
-				FrameFileExplorer FM_File = new FrameFileExplorer("Novo Usuário");
-				FM_File.setVisible(true);
-				
-				// Close this frame
-	    		ThisFrame.dispose();
-  		    }
-  		    
-  		  });
-  		
-  		BUT_Exit.addActionListener( new ActionListener () {
-  			
-  		    public void actionPerformed(ActionEvent e) 
-  		    {	
-  		    	// Open folder frame
-				FrameExit FM_Exit = new FrameExit("Sair do Sitema");
-				FM_Exit.setVisible(true);
-				
-	    	    // Close this frame
-	    		ThisFrame.dispose();
-  		    }
-  		    
-  		  });
+
   	
   		/****************************************************************/
   	
