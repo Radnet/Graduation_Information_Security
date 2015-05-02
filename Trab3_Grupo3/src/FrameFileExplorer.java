@@ -65,8 +65,8 @@ public class FrameFileExplorer extends JFrame{
 		//********** HEADER*******************************
   		JLabel LB_Login         = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo         = new JLabel("Grupo: " + user.getGrupo());
-  		JLabel LB_Decricao      = new JLabel("Descrição: " + user.getDescricao());
-  		JLabel LB_Consults      = new JLabel("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
+  		JLabel LB_Decricao      = new JLabel("DescriÃ§Ã£o: " + user.getDescricao());
+  		final JLabel LB_Consults      = new JLabel("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
   		JLabel LB_ArchiveSystem = new JLabel("Sistema de Arquivos Secretos");
   		//************************************************
   		
@@ -167,7 +167,7 @@ public class FrameFileExplorer extends JFrame{
   		      if (FilePathChooser.showOpenDialog(ThisFrame) == JFileChooser.APPROVE_OPTION) { 
   		    	  	try {
   		    	  		
-						FilePath = FilePathChooser.getCurrentDirectory();
+						FilePath = FilePathChooser.getSelectedFile();
 						
 					} catch(Exception e1) {
 						// TODO Auto-generated catch block
@@ -284,7 +284,7 @@ public class FrameFileExplorer extends JFrame{
 			ErrorMessage = "index.env nao esta presente na pasta selecionada";
 			return false;
 		}
-		IndexAss = new File(FilePath.getAbsolutePath() + "\\index.ass");
+		IndexAss = new File(FilePath.getAbsolutePath() + "\\index.asd");
 		if(!IndexAss.exists())
 		{
 			ErrorMessage = "index.ass nao esta presente na pasta selecionada";
