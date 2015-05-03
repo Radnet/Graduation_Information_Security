@@ -9,9 +9,9 @@ public class Main {
 		//******************************************************************
 		//TESTE
 		User user = User.GetUserObj();
-		user.setLogin("rafa");
+		user.setLogin("admin");
 		
-		SharedLibrary.FillUserProps("rafa");
+		SharedLibrary.FillUserProps("admin");
 		
 		FrameMenu frameMenu = new FrameMenu("Frame Menu");
 		frameMenu.setVisible(true);
