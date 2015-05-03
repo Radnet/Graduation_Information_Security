@@ -1,16 +1,15 @@
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
+import java.io.InputStreamReader;
 import java.security.Key;
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
@@ -18,13 +17,10 @@ import java.security.Security;
 import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -33,10 +29,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import sun.security.x509.X509AttributeName;
 
 
 
@@ -202,17 +197,26 @@ public class FrameFileExplorer extends JFrame{
 				    	
 				    	// Get Private key
 				    	PrivateKey Kpriv = GetPrivateKey(TXT_SecretPhrase.getText());
-				    	Key  symetricKey = GetSymetricKey(Kpriv, IndexEnv);
-				    	byte[] decryptedFileBytes = GetDecriptedEncBytes(IndexEnc, symetricKey);
+				    	// Get symmetric key
+				    	Key  symmetricKey = GetSymetricKey(Kpriv, IndexEnv);
+				    	// Get File decrypted bytes
+				    	byte[] decryptedFileBytes = GetDecriptedEncBytes(IndexEnc, symmetricKey);
 				    	
 				    	// Verify Signature
 				    	if(VerifySignature(decryptedFileBytes, IndexAss ))
 				    	{
-				    		String[] columnNames = {"Nome", "Hexa AssD", "Hexa EnvD", "Status"};
-					    	
-					  		Object[][] data = {	};
-					  		
-					    	JTable table = new JTable(data, columnNames);
+				    		// Load File list to memory
+				    		ArrayList<SecretFile> IndexFileList = new ArrayList<SecretFile>();
+				    		LoadIndexFileToList(decryptedFileBytes, IndexFileList);
+
+				    		// Set Status for each file
+				    		SetStatusFileList(IndexFileList);
+				    		
+				    		// Set HexaDecimal for each file
+				    		SetFilesHexadecimal(IndexFileList);
+				    		
+				    		TableModel model = new FileTableModel(IndexFileList);
+					    	JTable table = new JTable(model);
 					    	table.setFillsViewportHeight(true);
 					    	JScrollPane scrollPane = new JScrollPane(table);
 					    	scrollPane.setBounds (10,260,780,300);
@@ -297,6 +301,7 @@ public class FrameFileExplorer extends JFrame{
 		
 		return true;
 	}
+	
 	
 	public PrivateKey GetPrivateKey(String secretPhrase)
 	{
@@ -440,4 +445,75 @@ public class FrameFileExplorer extends JFrame{
 			return null;
 		}
 	}
+	
+    
+	public void LoadIndexFileToList(byte[] indexFileBytes, ArrayList<SecretFile> IndexFileList) {
+		
+		if(IndexFileList == null)
+		{
+			IndexFileList = new ArrayList<SecretFile>();
+		}
+		
+		try
+		{
+			InputStream input = new ByteArrayInputStream(indexFileBytes);
+	        BufferedReader bfReader = null;
+	        
+            bfReader = new BufferedReader(new InputStreamReader(input));
+            String temp = null;
+            while((temp = bfReader.readLine()) != null)
+            {
+            	if(!temp.equals(""))
+            	{
+	            	SecretFile newSecretFile = new SecretFile();
+					// Split current line
+					String[] line      = temp.split(" ");
+					newSecretFile.Name = line[0];
+					newSecretFile.Code = line[1];
+					newSecretFile.env = new File(FilePath.getAbsolutePath() + "\\" + newSecretFile.Code + ".env");
+					newSecretFile.enc = new File(FilePath.getAbsolutePath() + "\\" + newSecretFile.Code + ".enc");
+					newSecretFile.asd = new File(FilePath.getAbsolutePath() + "\\" + newSecretFile.Code + ".asd");
+					IndexFileList.add(newSecretFile);
+            	}
+            }
+			
+			input.close();    
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+    
+	private void SetStatusFileList(ArrayList<SecretFile> indexFileList) {
+		// Get Private key
+    	PrivateKey Kpriv = GetPrivateKey(TXT_SecretPhrase.getText());
+    	
+		for(SecretFile scretFile : indexFileList)
+		{
+	    	// Get symmetric key
+	    	Key  symmetricKey = GetSymetricKey(Kpriv, scretFile.env);
+	    	
+	    	// Get File decrypted bytes
+	    	byte[] decryptedFileBytes = GetDecriptedEncBytes(scretFile.enc, symmetricKey);
+	    	
+	    	if(VerifySignature(decryptedFileBytes, scretFile.asd ))
+	    	{
+	    		scretFile.Status = "OK";
+	    	}
+	    	else
+	    	{
+	    		scretFile.Status = "NOT OK";
+	    	}
+		}
+    	
+	}
+
+	private void SetFilesHexadecimal(ArrayList<SecretFile> indexFileList) {
+		for(SecretFile scretFile : indexFileList)
+		{
+			scretFile.HexAss = SharedLibrary.GetHexadecimal(getBytes(scretFile.asd.getAbsolutePath()));
+			scretFile.HexEnv = SharedLibrary.GetHexadecimal(getBytes(scretFile.env.getAbsolutePath()));
+		}
+	}
+	
 }
