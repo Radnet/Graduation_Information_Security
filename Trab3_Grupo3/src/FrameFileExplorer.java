@@ -78,7 +78,10 @@ public class FrameFileExplorer extends JFrame{
   		
   		JLabel LB_UserKPrivPath = new JLabel("Caminho Chave Privada:");
   		JLabel LB_SecretPhrase  = new JLabel("Frase Secreta:");                
-  		JLabel LB_FolderPath    = new JLabel("Caminho da Pasta:");     
+  		JLabel LB_FolderPath    = new JLabel("Caminho da Pasta:");
+  		JLabel LB_Instructions  = new JLabel("De um duplo click no nome do arquivo para decriptografa-lo");     
+  		JLabel LB_KprivPath     = new JLabel("");     
+  		JLabel LB_FilesPath     = new JLabel("");     
   		
   		TXT_SecretPhrase        = new JPasswordField();  		
   		
@@ -113,11 +116,14 @@ public class FrameFileExplorer extends JFrame{
   		LB_FolderPath    .setBounds (10,185,350,25); 
   		
   		BTN_KprivChooser .setBounds (160,125,50,25);
+  		LB_KprivPath     .setBounds (220,125,570,25);
   		TXT_SecretPhrase .setBounds (160,155,350,25);
   		BTN_FileChooser  .setBounds (160,185,50,25);
+  		LB_FilesPath     .setBounds (220,185,570,25);
   		
   		BTN_ShowFiles    .setBounds (10 ,220,100,25);
   		BTN_Back         .setBounds (120,220,100,25);
+  		LB_Instructions  .setBounds (230,240,350,25);
   		
 		/*********************************************/
 
@@ -134,8 +140,10 @@ public class FrameFileExplorer extends JFrame{
   		Panel.add(LB_FolderPath);
   		
   		Panel.add(BTN_KprivChooser);
+  		Panel.add(LB_KprivPath);
   		Panel.add(TXT_SecretPhrase);
   		Panel.add(BTN_FileChooser);
+  		Panel.add(LB_FilesPath);
   		
   		Panel.add(BTN_ShowFiles);
   		Panel.add(BTN_Back);
@@ -150,7 +158,10 @@ public class FrameFileExplorer extends JFrame{
   		      if (KprivChooser.showOpenDialog(ThisFrame) == JFileChooser.APPROVE_OPTION) { 
   		    	 
 	    	  		KprivFile = KprivChooser.getSelectedFile();
-  		    	  	
+	    	  		LB_KprivPath.setText(KprivFile.getAbsolutePath());
+	    	  		
+	    	  		Panel.revalidate();
+			    	Panel.repaint();
   		        }
   		    }
   		    
@@ -163,6 +174,10 @@ public class FrameFileExplorer extends JFrame{
   		    	  	try {
   		    	  		
 						FilePath = FilePathChooser.getSelectedFile();
+						LB_FilesPath.setText(FilePath.getAbsolutePath());
+						
+						Panel.revalidate();
+				    	Panel.repaint();
 						
 					} catch(Exception e1) {
 						// TODO Auto-generated catch block
@@ -235,7 +250,7 @@ public class FrameFileExplorer extends JFrame{
 					    	JScrollPane scrollPane = new JScrollPane(table);
 					    	scrollPane.setBounds (10,260,780,300);
 					    	Panel.add(scrollPane);
-					    	
+					    	Panel.add(LB_Instructions);
 					    	
 					    	Panel.revalidate();
 					    	Panel.repaint();
