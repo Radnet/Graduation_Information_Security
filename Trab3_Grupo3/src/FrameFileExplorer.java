@@ -10,6 +10,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
@@ -18,7 +19,9 @@ import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
@@ -198,11 +201,12 @@ public class FrameFileExplorer extends JFrame{
 				    	LB_Consults.setText("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
 				    	
 				    	// Get Private key
-				    	PrivateKey Kpriv       = GetPrivateKey(TXT_SecretPhrase.getText());
-				    	SecretKey  symetricKey = GetSymetricKey(Kpriv, IndexEnv);
+				    	PrivateKey Kpriv = GetPrivateKey(TXT_SecretPhrase.getText());
+				    	Key  symetricKey = GetSymetricKey(Kpriv, IndexEnv);
+				    	byte[] decryptedFileBytes = GetDecriptedEncBytes(IndexEnc, symetricKey);
 				    	
 				    	// Verify Signature
-				    	if(VerifySignature(IndexEnc, IndexAss ))
+				    	if(VerifySignature(decryptedFileBytes, IndexAss ))
 				    	{
 				    		String[] columnNames = {"Nome", "Hexa AssD", "Hexa EnvD", "Status"};
 					    	
@@ -301,34 +305,26 @@ public class FrameFileExplorer extends JFrame{
 		{	
 			// Generate symmetric DES key from the secretPhrase 
 			
-			SecureRandom prng = new SecureRandom(secretPhrase.getBytes("UTF8"));
+			SecureRandom prng   = SecureRandom.getInstance("SHA1PRNG", "SUN");
+			prng.setSeed(secretPhrase.getBytes("UTF8"));
 			KeyGenerator keyGen = KeyGenerator.getInstance("DES");
-			keyGen.init(prng);
+			keyGen.init(56, prng);
 			
-			SecretKey prngKey = keyGen.generateKey();
+			Key prngKey = keyGen.generateKey();
 			
 			// define DES cipher object
 			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding", "BC");
 			cipher.init(Cipher.DECRYPT_MODE, prngKey);
 			
 			// Decrypt private key file
-			int length;
-		    byte[] buffer = new byte[1024];
-		    
-			InputStream is = new FileInputStream(KprivFile);
+			String path       = KprivFile.getAbsolutePath();
+			byte[] KprivBytes = cipher.doFinal(getBytes(path));
 			
-			while((length = is.read(buffer)) != -1){
-				cipher.update(buffer, 0, length);
-			}
-			
-			is.close();
-			
-			byte[] KprivBytes = cipher.doFinal(buffer);
-			
-			KeyFactory kf = KeyFactory.getInstance("DES");
-			// For private keys use PKCS8EncodedKeySpec; for public keys use X509EncodedKeySpec
-			PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(KprivBytes);
-			return kf.generatePrivate(ks);
+			// get private key from key bytes read above
+	    	KeyFactory keyFactory        = KeyFactory.getInstance("RSA");
+	    	PKCS8EncodedKeySpec keyPKCS8 = new PKCS8EncodedKeySpec(KprivBytes);
+	    	PrivateKey key               = keyFactory.generatePrivate(keyPKCS8);
+	    	return key;
 					
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -337,24 +333,21 @@ public class FrameFileExplorer extends JFrame{
 		return null;
 	}
 	
-	private SecretKey GetSymetricKey(PrivateKey Kpriv, File file) 
+	private Key GetSymetricKey(PrivateKey Kpriv, File file) 
 	{
 		try 
 		{
 			// define DES cipher object
-			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 			cipher.init(Cipher.DECRYPT_MODE, Kpriv);
 			
-			// Decrypt private key file
-			InputStream is = new FileInputStream(file);
-			byte[] buffer = new byte[1024];
-			is.read(buffer);
-			is.close();
+			// Decrypt file
+			byte[] symetricKeySEEDBytes = cipher.doFinal(getBytes(file.getAbsolutePath()));
 			
-			byte[] symetricKeySEEDBytes = cipher.doFinal(buffer);
-			
-			SecureRandom prng = new SecureRandom(symetricKeySEEDBytes);
-			KeyGenerator keyGen = KeyGenerator.getInstance("DES", prng.getProvider());
+			SecureRandom prng   = SecureRandom.getInstance("SHA1PRNG", "SUN");
+			prng.setSeed(symetricKeySEEDBytes);
+			KeyGenerator keyGen = KeyGenerator.getInstance("DES");
+			keyGen.init(56, prng);
 			
 			return keyGen.generateKey();
 			
@@ -365,13 +358,14 @@ public class FrameFileExplorer extends JFrame{
 		return null;
 	}
 	
+	
 	private PublicKey GetPublicKey(String login)
 	{
 		PublicKey kPub = null;
 		
 		try {
 			
-			KeyFactory kf = KeyFactory.getInstance("DES");
+			KeyFactory kf = KeyFactory.getInstance("RSA");
 			
 			// For private keys use PKCS8EncodedKeySpec; for public keys use X509EncodedKeySpec
 			X509EncodedKeySpec ks = new X509EncodedKeySpec(dao.getKpub(login));
@@ -385,27 +379,17 @@ public class FrameFileExplorer extends JFrame{
 		return kPub;
 	}
 	
-	private boolean VerifySignature(File EncFile, File AsdFile)
+	private boolean VerifySignature(byte[] decryptedFileBytes, File AsdFile)
 	{
 		boolean response = false;
 		try
 		{
 			// Initialise Signature 
-			Signature sig = Signature.getInstance("MD5withDES");
+			Signature sig = Signature.getInstance("MD5WithRSA");
 			sig.initVerify(GetPublicKey(user.getLogin()));
 			
 			// Supply the Signature
-			FileInputStream datafis = new FileInputStream(EncFile);
-			BufferedInputStream bufin = new BufferedInputStream(datafis);
-
-			byte[] buffer = new byte[1024];
-			int len;
-			while (bufin.available() != 0) {
-			    len = bufin.read(buffer);
-			    sig.update(buffer, 0, len);
-			};
-
-			bufin.close();
+			sig.update(decryptedFileBytes);
 			
 			// Get signature byte[]
 			byte[] signatureBytes = new byte[(int) AsdFile.length()];
@@ -426,4 +410,34 @@ public class FrameFileExplorer extends JFrame{
 		return response;
 	}
 	
+	public byte[] getBytes (String filePath) {
+		try {
+			File file = new File(filePath);
+	    	FileInputStream fileInputStream;
+			fileInputStream = new FileInputStream(file);
+			int fileLenght = (int) file.length();
+	    	byte[] fileBytes = new byte[fileLenght];
+	    	fileInputStream.read(fileBytes);
+	    	fileInputStream.close();
+	    	return fileBytes;
+		} catch (IOException e) {
+			System.out.println("FileHandle getBytes(): Unable to get bytes from file '" + filePath + "'. " + e.getMessage());
+			return null;
+		}
+	}
+	
+	private byte[] GetDecriptedEncBytes(File indexEnc,Key key) {
+		byte[] fileBytes = getBytes(indexEnc.getAbsolutePath());
+		if (fileBytes == null) {
+			return null;
+		}
+		try {
+	    	Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+	    	cipher.init(Cipher.DECRYPT_MODE, key);
+	    	return cipher.doFinal(fileBytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
