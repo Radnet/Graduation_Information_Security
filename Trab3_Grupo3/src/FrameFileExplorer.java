@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -30,6 +31,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import sun.security.x509.X509AttributeName;
 
 
@@ -38,7 +41,7 @@ public class FrameFileExplorer extends JFrame{
 
 	public JFrame ThisFrame;
 	public Container Panel;
-	public byte[] KprivFileBuffer;
+	public File KprivFile;
 	public File FilePath;
 	
 	public File IndexEnv;
@@ -65,7 +68,7 @@ public class FrameFileExplorer extends JFrame{
 		//********** HEADER*******************************
   		JLabel LB_Login         = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo         = new JLabel("Grupo: " + user.getGrupo());
-  		JLabel LB_Decricao      = new JLabel("Descrição: " + user.getDescricao());
+  		JLabel LB_Decricao      = new JLabel("Descricao: " + user.getDescricao());
   		final JLabel LB_Consults      = new JLabel("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
   		JLabel LB_ArchiveSystem = new JLabel("Sistema de Arquivos Secretos");
   		//************************************************
@@ -144,18 +147,9 @@ public class FrameFileExplorer extends JFrame{
   		    public void actionPerformed(ActionEvent e) 
   		    {
   		      if (KprivChooser.showOpenDialog(ThisFrame) == JFileChooser.APPROVE_OPTION) { 
-  		    	  	try {
-  		    	  		KprivFileBuffer = new byte[1024];
-  		    	  		
-						InputStream is = new FileInputStream(KprivChooser.getSelectedFile());
-						is.read(KprivFileBuffer);
-						
-						is.close();
-						
-					} catch(IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+  		    	 
+	    	  		KprivFile = KprivChooser.getSelectedFile();
+  		    	  	
   		        }
   		    }
   		    
@@ -204,7 +198,7 @@ public class FrameFileExplorer extends JFrame{
 				    	LB_Consults.setText("Total de Consultas: " + dao.GetUserConsults(user.getLogin()));
 				    	
 				    	// Get Private key
-				    	PrivateKey Kpriv       = GetPrivateKey(TXT_SecretPhrase.getText(), KprivFileBuffer);
+				    	PrivateKey Kpriv       = GetPrivateKey(TXT_SecretPhrase.getText());
 				    	SecretKey  symetricKey = GetSymetricKey(Kpriv, IndexEnv);
 				    	
 				    	// Verify Signature
@@ -261,7 +255,7 @@ public class FrameFileExplorer extends JFrame{
 	
 	public boolean IsAllFieldsOK()
 	{
-		if(KprivFileBuffer == null)
+		if(KprivFile == null)
 		{
 			ErrorMessage = "Por favor, selecione o caminho da chave privada";
 			return false;
@@ -300,22 +294,35 @@ public class FrameFileExplorer extends JFrame{
 		return true;
 	}
 	
-	public PrivateKey GetPrivateKey(String secretPhrase, byte[] buffer)
+	public PrivateKey GetPrivateKey(String secretPhrase)
 	{
+		Security.addProvider( new BouncyCastleProvider() );
 		try 
 		{	
 			// Generate symmetric DES key from the secretPhrase 
 			
 			SecureRandom prng = new SecureRandom(secretPhrase.getBytes("UTF8"));
-			KeyGenerator keyGen = KeyGenerator.getInstance("DES", prng.getProvider());
+			KeyGenerator keyGen = KeyGenerator.getInstance("DES");
+			keyGen.init(prng);
 			
 			SecretKey prngKey = keyGen.generateKey();
 			
 			// define DES cipher object
-			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding", "BC");
 			cipher.init(Cipher.DECRYPT_MODE, prngKey);
 			
 			// Decrypt private key file
+			int length;
+		    byte[] buffer = new byte[1024];
+		    
+			InputStream is = new FileInputStream(KprivFile);
+			
+			while((length = is.read(buffer)) != -1){
+				cipher.update(buffer, 0, length);
+			}
+			
+			is.close();
+			
 			byte[] KprivBytes = cipher.doFinal(buffer);
 			
 			KeyFactory kf = KeyFactory.getInstance("DES");
