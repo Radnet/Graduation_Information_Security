@@ -1,10 +1,13 @@
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -187,7 +190,7 @@ public class FrameFileExplorer extends JFrame{
   		    public void actionPerformed(ActionEvent e) 
   		    {
   		    	// Verify fields
-  		    	if(IsAllFieldsOK())
+  		    	if(IsAllFormOK())
   		    	{
   		    		try
   		    		{
@@ -217,6 +220,17 @@ public class FrameFileExplorer extends JFrame{
 				    		
 				    		TableModel model = new FileTableModel(IndexFileList);
 					    	JTable table = new JTable(model);
+					    	table.addMouseListener(new MouseAdapter(){
+					    	     public void mouseClicked(MouseEvent e){
+					    	         if (e.getClickCount() == 2){
+					    	        	 int[] selRows = table.getSelectedRows();
+					    	        	 TableModel tm = table.getModel();
+					    	             String code = (String) tm.getValueAt(selRows[0],0);
+					    	             CreateDecryptedFile(IndexFileList, code);
+					    	            }
+					    	         }
+					    	        } );
+					    	
 					    	table.setFillsViewportHeight(true);
 					    	JScrollPane scrollPane = new JScrollPane(table);
 					    	scrollPane.setBounds (10,260,780,300);
@@ -261,7 +275,7 @@ public class FrameFileExplorer extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
-	public boolean IsAllFieldsOK()
+	public boolean IsAllFormOK()
 	{
 		if(KprivFile == null)
 		{
@@ -337,6 +351,7 @@ public class FrameFileExplorer extends JFrame{
 		}
 		return null;
 	}
+	
 	
 	private Key GetSymetricKey(PrivateKey Kpriv, File file) 
 	{
@@ -516,4 +531,41 @@ public class FrameFileExplorer extends JFrame{
 		}
 	}
 	
+	public void CreateDecryptedFile(ArrayList<SecretFile> indexFileList, String code)
+	{
+		SecretFile secretFile = null;
+		for(int i = 0 ; i < indexFileList.size() ; i++)
+		{
+			if(indexFileList.get(i).Code.equals(code))
+			{
+				secretFile = indexFileList.get(i); 
+			}
+		}
+		if(secretFile == null)
+		{
+			JOptionPane.showMessageDialog(ThisFrame,"Nao foi possivel decripitar o arquivo de codigo: " + code);
+		}
+		else
+		{
+			 try {
+			// Get Private key
+	    	PrivateKey Kpriv = GetPrivateKey(TXT_SecretPhrase.getText());
+	    	// Get symmetric key
+	    	Key  symmetricKey = GetSymetricKey(Kpriv, secretFile.env);
+	    	// Get File decrypted bytes
+	    	byte[] decryptedFileBytes = GetDecriptedEncBytes(secretFile.enc, symmetricKey);
+	    	
+	    	String outPath = secretFile.enc.getParent() + "\\" + secretFile.Name;
+	    	FileOutputStream fileOuputStream =  new FileOutputStream(outPath); 
+		   
+			fileOuputStream.write(decryptedFileBytes);
+		    fileOuputStream.close();
+		    
+		    JOptionPane.showMessageDialog(ThisFrame, "Arquivo foi decriptogrado e salvo com sucesso");
+			 } 
+			 catch (IOException e) {
+					e.printStackTrace();
+			}
+		}
+	}
 }
