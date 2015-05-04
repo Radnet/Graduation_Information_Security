@@ -50,6 +50,7 @@ public class FrameNewUser extends JFrame{
   		JLabel LB_Decricao  = new JLabel("Descricao: " + user.getDescricao());
   		JLabel LB_Access    = new JLabel("Total de usuarios no sistema: " + dao.NumberOfUsers());
   		JLabel LB_userForm  = new JLabel("Formulario de Cadastro");
+  		JLabel LB_KpubPath  = new JLabel("");
   		//************************************************
   		
   		//**************** FORM **************************
@@ -106,6 +107,7 @@ public class FrameNewUser extends JFrame{
   		TXT_UserPsw     .setBounds (160,215,350,25);
   		TXT_UserPswConf .setBounds (160,245,350,25);
   		BTN_Chooser     .setBounds (160,275, 50,25);
+  		LB_KpubPath     .setBounds (220,275,570,25);
   		TXT_UserTanSize .setBounds (160,305, 20,25);
   		
   		BTN_NewUser     .setBounds (160,345,100,25);
@@ -135,6 +137,7 @@ public class FrameNewUser extends JFrame{
   		Panel.add(TXT_UserPsw);
   		Panel.add(TXT_UserPswConf);
   		Panel.add(BTN_Chooser);
+  		Panel.add(LB_KpubPath);
   		Panel.add(TXT_UserTanSize);
   		
   		Panel.add(BTN_NewUser);
@@ -156,6 +159,11 @@ public class FrameNewUser extends JFrame{
 						is.read(Kpubbuffer);
 						
 						is.close();
+						
+						LB_KpubPath.setText(KpubChooser.getSelectedFile().getAbsolutePath());
+						
+						Panel.revalidate();
+				    	Panel.repaint();
 						
 					} catch(IOException e1) {
 						// TODO Auto-generated catch block
