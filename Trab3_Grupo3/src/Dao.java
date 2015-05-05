@@ -81,7 +81,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
     }
@@ -155,7 +155,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
     }
@@ -190,7 +190,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
         return "";
@@ -226,7 +226,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
         return "";
@@ -255,7 +255,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
     }
@@ -296,7 +296,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
         return responseList;
@@ -332,7 +332,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
         return false;
@@ -360,7 +360,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
     }
@@ -395,7 +395,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
         return "";
@@ -431,7 +431,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
         return 0;
@@ -474,7 +474,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
         return hasOTP;
@@ -518,7 +518,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
     }
@@ -554,7 +554,7 @@ public class Dao {
                      con.close();
                  }
              } catch (SQLException ex) {
-                 System.out.println("Erro ao fechar conexcoes.");
+                 System.out.println("Erro ao fechar conexões.");
              }
          }
          return true;
@@ -591,7 +591,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
     }
@@ -625,7 +625,7 @@ public class Dao {
                      con.close();
                  }
              } catch (SQLException ex) {
-                 System.out.println("Erro ao fechar conexcoes.");
+                 System.out.println("Erro ao fechar conexões.");
              }
         }
         return 0;
@@ -657,7 +657,7 @@ public class Dao {
                      con.close();
                  }
              } catch (SQLException ex) {
-                 System.out.println("Erro ao fechar conexcoes.");
+                 System.out.println("Erro ao fechar conexões.");
              }
          }
     }
@@ -692,7 +692,7 @@ public class Dao {
 	                     con.close();
 	                 }
 	             } catch (SQLException ex) {
-	                 System.out.println("Erro ao fechar conexcoes.");
+	                 System.out.println("Erro ao fechar conexões.");
 	             }
 	        }
 	        return 0;
@@ -722,7 +722,7 @@ public class Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexcoes.");
+                System.out.println("Erro ao fechar conexões.");
             }
         }
     }
@@ -758,7 +758,7 @@ public class Dao {
 	                    con.close();
 	                }
 	            } catch (SQLException ex) {
-	                System.out.println("Erro ao fechar conexcoes.");
+	                System.out.println("Erro ao fechar conexões.");
 	            }
 	        }
         
