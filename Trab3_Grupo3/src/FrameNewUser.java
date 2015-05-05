@@ -38,9 +38,15 @@ public class FrameNewUser extends JFrame{
 		ThisFrame = this;
 		setLayout(null);
 		
-		User user = User.GetUserObj();
-		
+		final User user = User.GetUserObj();
+                
+                //Create Dao objetc
 		final Dao dao = new Dao();
+                
+		//LOG
+                //Create DaoLog object
+                final DaoLog daoLog = new DaoLog();
+                daoLog.TelaCadastro(user.getLogin());
 		
 		/*****  Setting the attributes of the Frame *****/
 		
@@ -50,7 +56,7 @@ public class FrameNewUser extends JFrame{
   		JLabel LB_Decricao  = new JLabel("Descricao: " + user.getDescricao());
   		JLabel LB_Access    = new JLabel("Total de usuarios no sistema: " + dao.NumberOfUsers());
   		JLabel LB_userForm  = new JLabel("Formulario de Cadastro");
-  		JLabel LB_KpubPath  = new JLabel("");
+  		final JLabel LB_KpubPath  = new JLabel("");
   		//************************************************
   		
   		//**************** FORM **************************
@@ -83,7 +89,7 @@ public class FrameNewUser extends JFrame{
   		
 		/***********************************************/
   		
-  		Container Panel =  getContentPane();
+  		final Container Panel =  getContentPane();
   		
   		/*****  Adjusting the size of attributes *****/
   		
@@ -178,6 +184,9 @@ public class FrameNewUser extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+                        //LOG
+                        daoLog.Cadastrar(user.getLogin());
+                        
   		    	// Verify errors on form
   		    	if(IsAllFieldsOK())
   		    	{
@@ -264,11 +273,14 @@ public class FrameNewUser extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
-    			// Open new user frame
-				FrameMenu FM_Menu = new FrameMenu("Frame Menu");
-				FM_Menu.setVisible(true);
-				
-				// Close this frame
+                        //LOG
+                        daoLog.VoltarDeCadastrar(user.getLogin());
+                        
+                        // Open new user frame
+                        FrameMenu FM_Menu = new FrameMenu("Frame Menu");
+                        FM_Menu.setVisible(true);
+
+                        // Close this frame
 	    		ThisFrame.dispose();
   		    }
   		    

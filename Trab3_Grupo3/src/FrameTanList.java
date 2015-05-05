@@ -26,7 +26,12 @@ public class FrameTanList extends JFrame {
         ThisFrame = this;
 
         setLayout(null);
-
+        
+        //LOG
+        //Create DaoLog object
+        final DaoLog daoLog = new DaoLog();
+        daoLog.Autenticacao3Iniciada(User.GetUserObj().getDescricao());
+        
         /**
          * *** Setting the attributes of the Frame ****
          */
@@ -113,6 +118,11 @@ public class FrameTanList extends JFrame {
                     
                     // VERIFY OTP map
                     if (hm.get(OTPposition).equals(oneTimeHex)) {
+                        
+                        //LOG
+                        daoLog.OTPPositiva(User.GetUserObj().getDescricao());
+                        daoLog.Autenticacao3Encerrada(User.GetUserObj().getDescricao());
+                        
                         // Increment access count
                         dao.IncrementAccess(UserLogin);
                         
@@ -129,8 +139,22 @@ public class FrameTanList extends JFrame {
                         // Close this frame
                         ThisFrame.dispose();
                     } else {
+                        //LOG
+                        //Primeira tentativa
+                        if(trys == 3) daoLog.OTPPrimeiroErro(User.GetUserObj().getDescricao());
+
+                        //Segunda tentativa
+                        else if(trys == 2) daoLog.OTPSegundoErro(User.GetUserObj().getDescricao());
+
+                        //Terceira tentativa
+                        else if(trys == 1) daoLog.OTPTerceiroErro(User.GetUserObj().getDescricao());
+                        //END Log
+                        
                         trys--;
                         if (trys == 0) {
+                            //LOG
+                            daoLog.AcessoBloqueadoEtapa3(User.GetUserObj().getDescricao());
+                            
                             // Block User
                             dao.BlockUser(User.GetUserObj().getLogin());
                             

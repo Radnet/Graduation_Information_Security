@@ -14,12 +14,19 @@ public class FrameLogin extends JFrame {
     public JFrame ThisFrame;
 
     public FrameLogin(String Title) {
+        
+        
         super(Title);
-
+                
         ThisFrame = this;
 
         setLayout(null);
 
+        //LOG
+        //Create DaoLog object
+        DaoLog daoLog = new DaoLog();
+        daoLog.Autenticacao1Iniciada();
+        
         /**
          * *** Setting the attributes of the Frame ****
          */
@@ -62,8 +69,9 @@ public class FrameLogin extends JFrame {
         BUT_Login.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                // Create DAO object
+                // Create DAO and DaoLog object
                 Dao dao = new Dao();
+                DaoLog daoLog = new DaoLog();
 
                 // CReate user object
                 User user = User.GetUserObj();
@@ -77,9 +85,18 @@ public class FrameLogin extends JFrame {
                     }
                     // Verify if user is blocked
                     else if (dao.IsUserBlocked(user.getLogin())) {
+                        
+                        //LOG
+                        daoLog.AcessoBloqueadoEtapa1(user.getDescricao());
+                        
                         JOptionPane.showMessageDialog(ThisFrame, "O usuario foi bloqueado por 2 minutos. Aguarde a liberacao.");
                     } 
                     else {
+                        
+                        //LOG
+                        daoLog.AcessoLiberado(user.getDescricao());
+                        daoLog.Autenticacao1Encerrada();
+                        
                         // Open password frame
                         FramePassword FM_Password = new FramePassword("Etapa 2 - Senha");
                         FM_Password.setVisible(true);
@@ -88,6 +105,10 @@ public class FrameLogin extends JFrame {
                         ThisFrame.dispose();
                     }
                 } else {
+                
+                    //LOG    
+                    daoLog.LoginDesconhecido(user.getDescricao());
+                    
                     JOptionPane.showMessageDialog(ThisFrame, "Login errado, tente novamente.");
                 }
             }

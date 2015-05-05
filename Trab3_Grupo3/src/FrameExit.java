@@ -18,8 +18,13 @@ public class FrameExit extends JFrame{
 		ThisFrame = this;
 		setLayout(null);
 		
+                //Create DaoLog object
+                DaoLog daoLog = new DaoLog();
+                //LOG
+                daoLog.SistemaEncerrado();
+                
 		User user = User.GetUserObj();
-		
+                
 		/*****  Setting the attributes of the Frame *****/
 		
   		JLabel LB_Login     = new JLabel("Login: " + user.getLogin());

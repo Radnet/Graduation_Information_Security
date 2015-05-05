@@ -19,17 +19,22 @@ public class FrameMenu extends JFrame{
 		setLayout(null);
 		
 		User user = User.GetUserObj();
+                
+                //LOG
+                //Create DaoLog object
+                final DaoLog daoLog = new DaoLog();
+                daoLog.TelaPrincipal(user.getDescricao());
 		
 		/*****  Setting the attributes of the Frame *****/
 		
   		JLabel LB_Login     = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo     = new JLabel("Grupo: " + user.getGrupo());
-  		JLabel LB_Decricao  = new JLabel("Descrição: " + user.getDescricao());
+  		JLabel LB_Decricao  = new JLabel("Descriï¿½ï¿½o: " + user.getDescricao());
   		JLabel LB_Access    = new JLabel("Total de Acessos: " + user.getAccess());
   		JLabel LB_MainMenu  = new JLabel("Menu Principal:");
   		
-  		JButton BUT_NewUser = new JButton("1 - Cadastrar Novo Usuário");
-  		JButton BUT_Folder  = new JButton("2 - Consultar Pasta de Arquivos Secretos do Usuário");
+  		JButton BUT_NewUser = new JButton("1 - Cadastrar Novo Usuï¿½rio");
+  		JButton BUT_Folder  = new JButton("2 - Consultar Pasta de Arquivos Secretos do Usuï¿½rio");
   		JButton BUT_Exit    = new JButton("3 - Sair do Sistema");
   		
 		/***********************************************/
@@ -71,11 +76,14 @@ public class FrameMenu extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+                        //LOG
+                        daoLog.MenuOpcao1(User.GetUserObj().getDescricao());
+                        
     			// Open new user frame
-				FrameNewUser FM_NewUser = new FrameNewUser("Novo Usuário");
-				FM_NewUser.setVisible(true);
-				
-				// Close this frame
+                        FrameNewUser FM_NewUser = new FrameNewUser("Novo UsuÃ¡rio");
+                        FM_NewUser.setVisible(true);
+
+                        // Close this frame
 	    		ThisFrame.dispose();
   		    }
   		    
@@ -85,11 +93,14 @@ public class FrameMenu extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+                        //LOG
+                        daoLog.MenuOpcao2(User.GetUserObj().getDescricao());
+                        
   		    	// Open folder frame
-				FrameFileExplorer FM_File = new FrameFileExplorer("Novo Usuário");
-				FM_File.setVisible(true);
-				
-				// Close this frame
+                        FrameFileExplorer FM_File = new FrameFileExplorer("Pasta de arquivos");
+                        FM_File.setVisible(true);
+
+                        // Close this frame
 	    		ThisFrame.dispose();
   		    }
   		    
@@ -99,11 +110,14 @@ public class FrameMenu extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {	
-  		    	// Open folder frame
-				FrameExit FM_Exit = new FrameExit("Sair do Sitema");
-				FM_Exit.setVisible(true);
-				
-	    	    // Close this frame
+                        //LOG
+                        daoLog.MenuOpcao3(User.GetUserObj().getDescricao());
+                        
+                        // Open folder frame
+                        FrameExit FM_Exit = new FrameExit("Sair do Sitema");
+                        FM_Exit.setVisible(true);
+
+                        // Close this frame
 	    		ThisFrame.dispose();
   		    }
   		    

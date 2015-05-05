@@ -27,6 +27,11 @@ public class FramePassword extends JFrame {
 
         setLayout(null);
 
+        //LOG
+        //Create DaoLog object
+        final DaoLog daoLog = new DaoLog();
+        daoLog.Autenticacao2Iniciada(User.GetUserObj().getDescricao());
+        
         /**
          * *** Setting the attributes of the Frame ****
          */
@@ -182,7 +187,7 @@ public class FramePassword extends JFrame {
                         String passwordToTest = SharedLibrary.GetHexadecimal(pwDigest);
 
                         // If user password match, set flag to true
-                        if (passwordToTest.equals(user_pwsHash)) {
+                        if (passwordToTest.equals(user_pwsHash)) {               
                             pws_ok_flag = true;
                             break;
                         }
@@ -191,16 +196,36 @@ public class FramePassword extends JFrame {
                     }
                 }
 
-                if (pws_ok_flag) {
+                if (pws_ok_flag) {     
+                    //LOG
+                    daoLog.SenhaPositiva(User.GetUserObj().getDescricao());
+                    daoLog.Autenticacao2Encerrada(User.GetUserObj().getDescricao());
+                    
                     // OK, go to OTP step
                     FrameTanList FM_OTP = new FrameTanList("Etapa 3 - OTP");
                     FM_OTP.setVisible(true);
 
                     // Close this frame
                     ThisFrame.dispose();
-                } else {
+                } else {     
+                    //LOG
+                    daoLog.SenhaNegativa(User.GetUserObj().getDescricao());
+                    //Primeira tentativa
+                    if(trys == 3) daoLog.SenhaPrimeiroErro(User.GetUserObj().getLogin());
+                       
+                    //Segunda tentativa
+                    else if(trys == 2) daoLog.SenhaSegundoErro(User.GetUserObj().getLogin());
+                    
+                    //Terceira tentativa
+                    else if(trys == 1) daoLog.SenhaTerceiroErro(User.GetUserObj().getLogin());
+                    //END Log
+                    
                     trys--;
                     if (trys == 0) {
+                        
+                        //LOG
+                        daoLog.AcessoBloqueadoEtapa2(User.GetUserObj().getDescricao());
+                        
                         // Block User
                         dao.BlockUser(User.GetUserObj().getLogin());
 

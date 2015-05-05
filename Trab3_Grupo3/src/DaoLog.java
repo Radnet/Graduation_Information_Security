@@ -28,6 +28,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("Erro ao executar query de sistema iniciado");
             return false;
         } finally {
