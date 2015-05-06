@@ -43,7 +43,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -75,7 +75,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -107,7 +107,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -139,7 +139,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -172,7 +172,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -205,7 +205,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -238,7 +238,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -271,7 +271,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -304,7 +304,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -336,7 +336,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -369,7 +369,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -402,7 +402,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -435,7 +435,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -468,7 +468,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -501,7 +501,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -534,7 +534,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -567,7 +567,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -600,7 +600,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -633,7 +633,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -666,7 +666,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -699,7 +699,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -732,7 +732,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -765,7 +765,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -784,7 +784,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de menu - opção 1 selecionada");
+            System.out.println("Erro ao executar query de menu - opcao 1 selecionada");
             return false;
         } finally {
             try {
@@ -798,7 +798,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -817,7 +817,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de menu - opção 2 selecionada");
+            System.out.println("Erro ao executar query de menu - opcao 2 selecionada");
             return false;
         } finally {
             try {
@@ -831,7 +831,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -850,7 +850,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de menu - opção 3 selecionada");
+            System.out.println("Erro ao executar query de menu - opcao 3 selecionada");
             return false;
         } finally {
             try {
@@ -864,7 +864,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -897,7 +897,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -916,7 +916,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de botão cadastrar pressionado");
+            System.out.println("Erro ao executar query de botao cadastrar pressionado");
             return false;
         } finally {
             try {
@@ -930,7 +930,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -949,7 +949,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de botão cadastrar pressionado");
+            System.out.println("Erro ao executar query de botao cadastrar pressionado");
             return false;
         } finally {
             try {
@@ -963,7 +963,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -996,7 +996,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1015,7 +1015,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de botão voltar de consulta pressionado");
+            System.out.println("Erro ao executar query de botao voltar de consulta pressionado");
             return false;
         } finally {
             try {
@@ -1029,7 +1029,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1048,7 +1048,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de botão listar consulta pressionado");
+            System.out.println("Erro ao executar query de botao listar consulta pressionado");
             return false;
         } finally {
             try {
@@ -1062,7 +1062,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1081,7 +1081,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de caminho para chave privada inválido");
+            System.out.println("Erro ao executar query de caminho para chave privada invalido");
             return false;
         } finally {
             try {
@@ -1095,7 +1095,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1128,7 +1128,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1147,7 +1147,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de caminho da pasta de arquivos inválido");
+            System.out.println("Erro ao executar query de caminho da pasta de arquivos invalido");
             return false;
         } finally {
             try {
@@ -1161,7 +1161,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1194,7 +1194,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1213,7 +1213,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de arquivo selecionado para decriptação");
+            System.out.println("Erro ao executar query de arquivo selecionado para decriptacao");
             return false;
         } finally {
             try {
@@ -1227,7 +1227,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1260,7 +1260,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1293,7 +1293,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1326,7 +1326,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1360,7 +1360,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1379,7 +1379,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de tela de saída apresentada");
+            System.out.println("Erro ao executar query de tela de saida apresentada");
             return false;
         } finally {
             try {
@@ -1393,7 +1393,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1412,7 +1412,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e) {
-            System.out.println("Erro ao executar query de botão de sair pressionado");
+            System.out.println("Erro ao executar query de botao de sair pressionado");
             return false;
         } finally {
             try {
@@ -1426,7 +1426,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }
@@ -1445,7 +1445,7 @@ public class DaoLog extends Dao {
             return (count>0);
             
         } catch (SQLException e){
-            System.out.println("Erro ao executar query de botão de voltar de sair pressionado");
+            System.out.println("Erro ao executar query de botao de voltar de sair pressionado");
             return false;
         } finally {
             try {
@@ -1459,7 +1459,7 @@ public class DaoLog extends Dao {
                     con.close();
                 }
             } catch (SQLException ex) {
-                System.out.println("Erro ao fechar conexões.");
+                System.out.println("Erro ao fechar conexoes.");
             }
         }
     }

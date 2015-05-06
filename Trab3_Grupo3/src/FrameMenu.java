@@ -29,12 +29,12 @@ public class FrameMenu extends JFrame{
 		
   		JLabel LB_Login     = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo     = new JLabel("Grupo: " + user.getGrupo());
-  		JLabel LB_Decricao  = new JLabel("Descri��o: " + user.getLogin());
+  		JLabel LB_Decricao  = new JLabel("Descricao: " + user.getLogin());
   		JLabel LB_Access    = new JLabel("Total de Acessos: " + user.getAccess());
   		JLabel LB_MainMenu  = new JLabel("Menu Principal:");
   		
-  		JButton BUT_NewUser = new JButton("1 - Cadastrar Novo Usu�rio");
-  		JButton BUT_Folder  = new JButton("2 - Consultar Pasta de Arquivos Secretos do Usu�rio");
+  		JButton BUT_NewUser = new JButton("1 - Cadastrar Novo Usuario");
+  		JButton BUT_Folder  = new JButton("2 - Consultar Pasta de Arquivos Secretos do Usuario");
   		JButton BUT_Exit    = new JButton("3 - Sair do Sistema");
   		
 		/***********************************************/
@@ -80,7 +80,7 @@ public class FrameMenu extends JFrame{
                         daoLog.MenuOpcao1(User.GetUserObj().getLogin());
                         
     			// Open new user frame
-                        FrameNewUser FM_NewUser = new FrameNewUser("Novo Usuário");
+                        FrameNewUser FM_NewUser = new FrameNewUser("Novo Usuario");
                         FM_NewUser.setVisible(true);
 
                         // Close this frame
