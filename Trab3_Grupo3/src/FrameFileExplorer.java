@@ -49,6 +49,8 @@ public class FrameFileExplorer extends JFrame{
 	public File IndexAss;
 	public File IndexEnc;
 	
+	JScrollPane scrollPane;
+	
 	public JPasswordField TXT_SecretPhrase   ;
 	
 	public String ErrorMessage;
@@ -215,6 +217,13 @@ public class FrameFileExplorer extends JFrame{
   		    {
                         //LOG
                         daoLog.ListarConsulta(user.getLogin());
+           
+                if(scrollPane != null)  
+                {
+	                Panel.remove(scrollPane);        
+	                Panel.revalidate();
+			    	Panel.repaint();
+                }
                         
   		    	// Verify fields
   		    	if(IsAllFormOK())
@@ -262,7 +271,7 @@ public class FrameFileExplorer extends JFrame{
 					    	        } );
 					    	
 					    	table.setFillsViewportHeight(true);
-					    	JScrollPane scrollPane = new JScrollPane(table);
+					    	scrollPane = new JScrollPane(table);
 					    	scrollPane.setBounds (10,260,780,300);
 					    	Panel.add(scrollPane);
 					    	Panel.add(LB_Instructions);
