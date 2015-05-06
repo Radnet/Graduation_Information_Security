@@ -5,6 +5,14 @@ public class Register {
 	public String loginName;
 	public String arqName;
 	
+	public Register()
+	{
+		time = "";
+		codigo = 0;
+		loginName = "";
+		arqName = "";
+	}
+	
 	public String getTime() {
 		return time;
 	}
