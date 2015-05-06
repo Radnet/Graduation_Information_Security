@@ -30,7 +30,7 @@ public class FrameTanList extends JFrame {
         //LOG
         //Create DaoLog object
         final DaoLog daoLog = new DaoLog();
-        daoLog.Autenticacao3Iniciada(User.GetUserObj().getDescricao());
+        daoLog.Autenticacao3Iniciada(User.GetUserObj().getLogin());
         
         /**
          * *** Setting the attributes of the Frame ****
@@ -120,8 +120,8 @@ public class FrameTanList extends JFrame {
                     if (hm.get(OTPposition).equals(oneTimeHex)) {
                         
                         //LOG
-                        daoLog.OTPPositiva(User.GetUserObj().getDescricao());
-                        daoLog.Autenticacao3Encerrada(User.GetUserObj().getDescricao());
+                        daoLog.OTPPositiva(User.GetUserObj().getLogin());
+                        daoLog.Autenticacao3Encerrada(User.GetUserObj().getLogin());
                         
                         // Increment access count
                         dao.IncrementAccess(UserLogin);
@@ -141,21 +141,22 @@ public class FrameTanList extends JFrame {
                     } else {
                         //LOG
                         //Primeira tentativa
-                        if(trys == 3) daoLog.OTPPrimeiroErro(User.GetUserObj().getDescricao());
+                        if(trys == 3) daoLog.OTPPrimeiroErro(User.GetUserObj().getLogin());
 
                         //Segunda tentativa
-                        else if(trys == 2) daoLog.OTPSegundoErro(User.GetUserObj().getDescricao());
+                        else if(trys == 2) daoLog.OTPSegundoErro(User.GetUserObj().getLogin());
 
                         //Terceira tentativa
-                        else if(trys == 1) daoLog.OTPTerceiroErro(User.GetUserObj().getDescricao());
+                        else if(trys == 1) daoLog.OTPTerceiroErro(User.GetUserObj().getLogin());
                         //END Log
                         
                         trys--;
                         if (trys == 0) {
                             //LOG
-                            daoLog.AcessoBloqueadoEtapa3(User.GetUserObj().getDescricao());
+                            daoLog.AcessoBloqueadoEtapa3(User.GetUserObj().getLogin());
                             
                             // Block User
+                            daoLog.Autenticacao3Encerrada(User.GetUserObj().getLogin());
                             dao.BlockUser(User.GetUserObj().getLogin());
                             
                             JOptionPane.showMessageDialog(ThisFrame, "One time password errada. Suas tentaivas acabaram. Usuario bloqueado por 2 minutos.");

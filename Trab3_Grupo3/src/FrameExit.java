@@ -19,11 +19,12 @@ public class FrameExit extends JFrame{
 		setLayout(null);
 		
                 //Create DaoLog object
-                DaoLog daoLog = new DaoLog();
-                //LOG
-                daoLog.SistemaEncerrado();
+                final DaoLog daoLog = new DaoLog();
                 
 		User user = User.GetUserObj();
+                
+                //LOG
+                daoLog.TelaSair(user.getLogin());
                 
 		/*****  Setting the attributes of the Frame *****/
 		
@@ -72,6 +73,9 @@ public class FrameExit extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+                        //LOG
+                        daoLog.Sair(User.GetUserObj().getLogin());
+                        
   		    	// Close this frame
 	    		ThisFrame.dispose();
 	    		
@@ -85,6 +89,9 @@ public class FrameExit extends JFrame{
   			
   		    public void actionPerformed(ActionEvent e) 
   		    {
+                        //LOG
+                        daoLog.VoltarSair(User.GetUserObj().getLogin());
+                        
     			// Open new user frame
 				FrameMenu FM_Menu = new FrameMenu("Frame Menu");
 				FM_Menu.setVisible(true);

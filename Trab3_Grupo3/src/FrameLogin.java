@@ -15,7 +15,6 @@ public class FrameLogin extends JFrame {
 
     public FrameLogin(String Title) {
         
-        
         super(Title);
                 
         ThisFrame = this;
@@ -87,14 +86,14 @@ public class FrameLogin extends JFrame {
                     else if (dao.IsUserBlocked(user.getLogin())) {
                         
                         //LOG
-                        daoLog.AcessoBloqueadoEtapa1(user.getDescricao());
+                        daoLog.AcessoBloqueadoEtapa1(user.getLogin());
                         
                         JOptionPane.showMessageDialog(ThisFrame, "O usuario foi bloqueado por 2 minutos. Aguarde a liberacao.");
                     } 
                     else {
                         
                         //LOG
-                        daoLog.AcessoLiberado(user.getDescricao());
+                        daoLog.AcessoLiberado(user.getLogin());
                         daoLog.Autenticacao1Encerrada();
                         
                         // Open password frame
@@ -107,7 +106,7 @@ public class FrameLogin extends JFrame {
                 } else {
                 
                     //LOG    
-                    daoLog.LoginDesconhecido(user.getDescricao());
+                    daoLog.LoginDesconhecido(user.getLogin());
                     
                     JOptionPane.showMessageDialog(ThisFrame, "Login errado, tente novamente.");
                 }

@@ -53,8 +53,12 @@ public class FrameFileExplorer extends JFrame{
 	
 	public String ErrorMessage;
 	
+        public Boolean decrpytFlag = true;
+        
 	User user = User.GetUserObj();
 	
+        //Create Dao and DaoLog object
+        final DaoLog daoLog = new DaoLog();
 	Dao dao = new Dao();
 	
 	public FrameFileExplorer(String Title)
@@ -63,6 +67,8 @@ public class FrameFileExplorer extends JFrame{
 		ThisFrame = this;
 		setLayout(null);
 		
+                //LOG
+                daoLog.TelaConsulta(user.getLogin());
 		
 		/*****  Setting the attributes of the Frame *****/
 		
@@ -79,9 +85,9 @@ public class FrameFileExplorer extends JFrame{
   		JLabel LB_UserKPrivPath = new JLabel("Caminho Chave Privada:");
   		JLabel LB_SecretPhrase  = new JLabel("Frase Secreta:");                
   		JLabel LB_FolderPath    = new JLabel("Caminho da Pasta:");
-  		JLabel LB_Instructions  = new JLabel("De um duplo click no nome do arquivo para decriptografa-lo");     
-  		JLabel LB_KprivPath     = new JLabel("");     
-  		JLabel LB_FilesPath     = new JLabel("");     
+  		final JLabel LB_Instructions  = new JLabel("De um duplo click no nome do arquivo para decriptografa-lo");     
+  		final JLabel LB_KprivPath     = new JLabel("");     
+  		final JLabel LB_FilesPath     = new JLabel("");     
   		
   		TXT_SecretPhrase        = new JPasswordField();  		
   		
@@ -191,6 +197,9 @@ public class FrameFileExplorer extends JFrame{
   		BTN_Back.addActionListener( new ActionListener () {
   		    public void actionPerformed(ActionEvent e) 
   		    {
+                        //LOG
+                        daoLog.VoltarDeConsulta(user.getLogin());
+                        
     			// Open new user frame
 				FrameMenu FM_Menu = new FrameMenu("Frame Menu");
 				FM_Menu.setVisible(true);
@@ -204,6 +213,9 @@ public class FrameFileExplorer extends JFrame{
   		BTN_ShowFiles.addActionListener( new ActionListener () {
   		    public void actionPerformed(ActionEvent e) 
   		    {
+                        //LOG
+                        daoLog.ListarConsulta(user.getLogin());
+                        
   		    	// Verify fields
   		    	if(IsAllFormOK())
   		    	{
@@ -223,8 +235,11 @@ public class FrameFileExplorer extends JFrame{
 				    	// Verify Signature
 				    	if(VerifySignature(decryptedFileBytes, IndexAss ))
 				    	{
+                                                //LOG
+                                                daoLog.ListaArquivos(user.getLogin());
+                                                
 				    		// Load File list to memory
-				    		ArrayList<SecretFile> IndexFileList = new ArrayList<SecretFile>();
+				    		final ArrayList<SecretFile> IndexFileList = new ArrayList<SecretFile>();
 				    		LoadIndexFileToList(decryptedFileBytes, IndexFileList);
 
 				    		// Set Status for each file
@@ -234,7 +249,7 @@ public class FrameFileExplorer extends JFrame{
 				    		SetFilesHexadecimal(IndexFileList);
 				    		
 				    		TableModel model = new FileTableModel(IndexFileList);
-					    	JTable table = new JTable(model);
+					    	final JTable table = new JTable(model);
 					    	table.addMouseListener(new MouseAdapter(){
 					    	     public void mouseClicked(MouseEvent e){
 					    	         if (e.getClickCount() == 2){
@@ -257,7 +272,7 @@ public class FrameFileExplorer extends JFrame{
 				    	}
 				    	else
 				    	{
-				    		JOptionPane.showMessageDialog(ThisFrame, "O arquivo Inde.enc nao passou no teste de integridade/autenticidade");
+				    		JOptionPane.showMessageDialog(ThisFrame, "O arquivo Index.enc nao passou no teste de integridade/autenticidade");
 				    	}
 				    	
   		    		}
@@ -294,16 +309,25 @@ public class FrameFileExplorer extends JFrame{
 	{
 		if(KprivFile == null)
 		{
+                        //LOG
+                        daoLog.CaminhoPKInvalido(user.getLogin());
+                        
 			ErrorMessage = "Por favor, selecione o caminho da chave privada";
 			return false;
 		}
 		if(TXT_SecretPhrase.getText().equals(""))
 		{
+                        //LOG
+                        daoLog.FSInvalida(user.getLogin());
+                        
 			ErrorMessage = "Por favor, insira a frase secreta";
 			return false;
 		}
 		if(FilePath == null)
 		{
+                        //LOG
+                        daoLog.CaminhoPastaInvalido(user.getLogin());
+                        
 			ErrorMessage = "Por favor, selecione o caminho da pasta";
 			return false;
 		}
@@ -334,11 +358,10 @@ public class FrameFileExplorer extends JFrame{
 	
 	public PrivateKey GetPrivateKey(String secretPhrase)
 	{
-		Security.addProvider( new BouncyCastleProvider() );
+            Security.addProvider( new BouncyCastleProvider() );
 		try 
 		{	
 			// Generate symmetric DES key from the secretPhrase 
-			
 			SecureRandom prng   = SecureRandom.getInstance("SHA1PRNG", "SUN");
 			prng.setSeed(secretPhrase.getBytes("UTF8"));
 			KeyGenerator keyGen = KeyGenerator.getInstance("DES");
@@ -355,14 +378,14 @@ public class FrameFileExplorer extends JFrame{
 			byte[] KprivBytes = cipher.doFinal(getBytes(path));
 			
 			// get private key from key bytes read above
-	    	KeyFactory keyFactory        = KeyFactory.getInstance("RSA");
-	    	PKCS8EncodedKeySpec keyPKCS8 = new PKCS8EncodedKeySpec(KprivBytes);
-	    	PrivateKey key               = keyFactory.generatePrivate(keyPKCS8);
-	    	return key;
+                        KeyFactory keyFactory        = KeyFactory.getInstance("RSA");
+                        PKCS8EncodedKeySpec keyPKCS8 = new PKCS8EncodedKeySpec(KprivBytes);
+                        PrivateKey key               = keyFactory.generatePrivate(keyPKCS8);
+                        return key;
 					
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
 		}
 		return null;
 	}
@@ -399,7 +422,6 @@ public class FrameFileExplorer extends JFrame{
 		PublicKey kPub = null;
 		
 		try {
-			
 			KeyFactory kf = KeyFactory.getInstance("RSA");
 			
 			// For private keys use PKCS8EncodedKeySpec; for public keys use X509EncodedKeySpec
@@ -462,7 +484,8 @@ public class FrameFileExplorer extends JFrame{
 	}
 	
 	private byte[] GetDecriptedEncBytes(File indexEnc,Key key) {
-		byte[] fileBytes = getBytes(indexEnc.getAbsolutePath());
+		decrpytFlag = true;
+                byte[] fileBytes = getBytes(indexEnc.getAbsolutePath());
 		if (fileBytes == null) {
 			return null;
 		}
@@ -471,7 +494,8 @@ public class FrameFileExplorer extends JFrame{
 	    	cipher.init(Cipher.DECRYPT_MODE, key);
 	    	return cipher.doFinal(fileBytes);
 		} catch (Exception e) {
-			e.printStackTrace();
+                        decrpytFlag = false;
+                        e.printStackTrace();
 			return null;
 		}
 	}
@@ -516,23 +540,30 @@ public class FrameFileExplorer extends JFrame{
     
 	private void SetStatusFileList(ArrayList<SecretFile> indexFileList) {
 		// Get Private key
-    	PrivateKey Kpriv = GetPrivateKey(TXT_SecretPhrase.getText());
+                PrivateKey Kpriv = GetPrivateKey(TXT_SecretPhrase.getText());
     	
-		for(SecretFile scretFile : indexFileList)
+		for(SecretFile secretFile : indexFileList)
 		{
 	    	// Get symmetric key
-	    	Key  symmetricKey = GetSymetricKey(Kpriv, scretFile.env);
+	    	Key  symmetricKey = GetSymetricKey(Kpriv, secretFile.env);
 	    	
 	    	// Get File decrypted bytes
-	    	byte[] decryptedFileBytes = GetDecriptedEncBytes(scretFile.enc, symmetricKey);
+                boolean success = false;
+	    	byte[] decryptedFileBytes = GetDecriptedEncBytes(secretFile.enc, symmetricKey);
 	    	
-	    	if(VerifySignature(decryptedFileBytes, scretFile.asd ))
+	    	if(VerifySignature(decryptedFileBytes, secretFile.asd ))
 	    	{
-	    		scretFile.Status = "OK";
+                        //LOG
+                        daoLog.VerificacaoOK(secretFile.Code, user.getLogin());
+                        
+	    		secretFile.Status = "OK";
 	    	}
 	    	else
 	    	{
-	    		scretFile.Status = "NOT OK";
+                        //LOG
+                        daoLog.VerificacaoNotOK(secretFile.Code, user.getLogin());
+                        
+	    		secretFile.Status = "NOT OK";
 	    	}
 		}
     	
@@ -549,6 +580,10 @@ public class FrameFileExplorer extends JFrame{
 	public void CreateDecryptedFile(ArrayList<SecretFile> indexFileList, String code)
 	{
 		SecretFile secretFile = null;
+                
+                //LOG
+                daoLog.ArquivoSelecionado(code,user.getLogin());
+
 		for(int i = 0 ; i < indexFileList.size() ; i++)
 		{
 			if(indexFileList.get(i).Code.equals(code))
@@ -558,6 +593,9 @@ public class FrameFileExplorer extends JFrame{
 		}
 		if(secretFile == null)
 		{
+                        //LOG
+                        daoLog.DecriptacaoNotOK(code,user.getLogin());
+                
 			JOptionPane.showMessageDialog(ThisFrame,"Nao foi possivel decripitar o arquivo de codigo: " + code);
 		}
 		else
@@ -570,12 +608,20 @@ public class FrameFileExplorer extends JFrame{
 	    	// Get File decrypted bytes
 	    	byte[] decryptedFileBytes = GetDecriptedEncBytes(secretFile.enc, symmetricKey);
 	    	
+                //LOG
+                if(!decrpytFlag){
+                    daoLog.DecriptacaoNotOK(code,user.getLogin());
+                }
+                
 	    	String outPath = secretFile.enc.getParent() + "\\" + secretFile.Name;
 	    	FileOutputStream fileOuputStream =  new FileOutputStream(outPath); 
 		   
 			fileOuputStream.write(decryptedFileBytes);
 		    fileOuputStream.close();
-		    
+                    
+                    //LOG
+                    daoLog.DecriptacaoOK(code, user.getLogin());
+                    
 		    JOptionPane.showMessageDialog(ThisFrame, "Arquivo foi decriptogrado e salvo com sucesso");
 			 } 
 			 catch (IOException e) {

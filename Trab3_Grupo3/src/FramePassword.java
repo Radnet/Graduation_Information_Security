@@ -30,7 +30,7 @@ public class FramePassword extends JFrame {
         //LOG
         //Create DaoLog object
         final DaoLog daoLog = new DaoLog();
-        daoLog.Autenticacao2Iniciada(User.GetUserObj().getDescricao());
+        daoLog.Autenticacao2Iniciada(User.GetUserObj().getLogin());
         
         /**
          * *** Setting the attributes of the Frame ****
@@ -198,8 +198,8 @@ public class FramePassword extends JFrame {
 
                 if (pws_ok_flag) {     
                     //LOG
-                    daoLog.SenhaPositiva(User.GetUserObj().getDescricao());
-                    daoLog.Autenticacao2Encerrada(User.GetUserObj().getDescricao());
+                    daoLog.SenhaPositiva(User.GetUserObj().getLogin());
+                    daoLog.Autenticacao2Encerrada(User.GetUserObj().getLogin());
                     
                     // OK, go to OTP step
                     FrameTanList FM_OTP = new FrameTanList("Etapa 3 - OTP");
@@ -209,7 +209,7 @@ public class FramePassword extends JFrame {
                     ThisFrame.dispose();
                 } else {     
                     //LOG
-                    daoLog.SenhaNegativa(User.GetUserObj().getDescricao());
+                    daoLog.SenhaNegativa(User.GetUserObj().getLogin());
                     //Primeira tentativa
                     if(trys == 3) daoLog.SenhaPrimeiroErro(User.GetUserObj().getLogin());
                        
@@ -224,7 +224,8 @@ public class FramePassword extends JFrame {
                     if (trys == 0) {
                         
                         //LOG
-                        daoLog.AcessoBloqueadoEtapa2(User.GetUserObj().getDescricao());
+                        daoLog.AcessoBloqueadoEtapa2(User.GetUserObj().getLogin());
+                        daoLog.Autenticacao2Encerrada(User.GetUserObj().getLogin());
                         
                         // Block User
                         dao.BlockUser(User.GetUserObj().getLogin());

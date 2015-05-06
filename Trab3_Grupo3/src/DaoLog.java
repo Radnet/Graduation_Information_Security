@@ -1133,7 +1133,7 @@ public class DaoLog extends Dao {
         }
     }
     
-    public boolean CaminhoPasta(String login){
+    public boolean CaminhoPastaInvalido(String login){
         String query = "INSERT INTO registros (time,codigo,loginName) VALUES(datetime(CURRENT_TIMESTAMP,'localtime'),7006,?)";
         Connection con = getConnection();
         try {
@@ -1365,7 +1365,7 @@ public class DaoLog extends Dao {
         }
     }
     
-    public boolean TelaSair(String arquivo, String login){
+    public boolean TelaSair(String login){
         String query = "INSERT INTO registros (time,codigo,loginName) VALUES(datetime(CURRENT_TIMESTAMP,'localtime'),8001,?)";
         Connection con = getConnection();
         try {
@@ -1398,7 +1398,7 @@ public class DaoLog extends Dao {
         }
     }
     
-    public boolean Sair(String arquivo, String login){
+    public boolean Sair(String login){
         String query = "INSERT INTO registros (time,codigo,loginName) VALUES(datetime(CURRENT_TIMESTAMP,'localtime'),8002,?)";
         Connection con = getConnection();
         try {
@@ -1431,7 +1431,7 @@ public class DaoLog extends Dao {
         }
     }
     
-    public boolean VoltarSair(String arquivo, String login){
+    public boolean VoltarSair(String login){
         String query = "INSERT INTO registros (time,codigo,loginName) VALUES(datetime(CURRENT_TIMESTAMP,'localtime'),8003,?)";
         Connection con = getConnection();
         try {

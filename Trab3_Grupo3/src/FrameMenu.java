@@ -23,13 +23,13 @@ public class FrameMenu extends JFrame{
                 //LOG
                 //Create DaoLog object
                 final DaoLog daoLog = new DaoLog();
-                daoLog.TelaPrincipal(user.getDescricao());
+                daoLog.TelaPrincipal(user.getLogin());
 		
 		/*****  Setting the attributes of the Frame *****/
 		
   		JLabel LB_Login     = new JLabel("Login: " + user.getLogin());
   		JLabel LB_Grupo     = new JLabel("Grupo: " + user.getGrupo());
-  		JLabel LB_Decricao  = new JLabel("Descri��o: " + user.getDescricao());
+  		JLabel LB_Decricao  = new JLabel("Descri��o: " + user.getLogin());
   		JLabel LB_Access    = new JLabel("Total de Acessos: " + user.getAccess());
   		JLabel LB_MainMenu  = new JLabel("Menu Principal:");
   		
@@ -77,7 +77,7 @@ public class FrameMenu extends JFrame{
   		    public void actionPerformed(ActionEvent e) 
   		    {
                         //LOG
-                        daoLog.MenuOpcao1(User.GetUserObj().getDescricao());
+                        daoLog.MenuOpcao1(User.GetUserObj().getLogin());
                         
     			// Open new user frame
                         FrameNewUser FM_NewUser = new FrameNewUser("Novo Usuário");
@@ -94,7 +94,7 @@ public class FrameMenu extends JFrame{
   		    public void actionPerformed(ActionEvent e) 
   		    {
                         //LOG
-                        daoLog.MenuOpcao2(User.GetUserObj().getDescricao());
+                        daoLog.MenuOpcao2(User.GetUserObj().getLogin());
                         
   		    	// Open folder frame
                         FrameFileExplorer FM_File = new FrameFileExplorer("Pasta de arquivos");
@@ -111,7 +111,7 @@ public class FrameMenu extends JFrame{
   		    public void actionPerformed(ActionEvent e) 
   		    {	
                         //LOG
-                        daoLog.MenuOpcao3(User.GetUserObj().getDescricao());
+                        daoLog.MenuOpcao3(User.GetUserObj().getLogin());
                         
                         // Open folder frame
                         FrameExit FM_Exit = new FrameExit("Sair do Sitema");
