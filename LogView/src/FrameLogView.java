@@ -64,6 +64,7 @@ public class FrameLogView extends JFrame{
 		ArrayList<Register> registers = dao.GetRegisters();
 		ArrayList<Message> messages = dao.GetMessages();
 		
+		
 		for(Register reg : registers)
 		{
 			Log logRow = new Log();

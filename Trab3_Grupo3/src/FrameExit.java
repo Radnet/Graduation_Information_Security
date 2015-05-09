@@ -79,6 +79,9 @@ public class FrameExit extends JFrame{
   		    	// Close this frame
 	    		ThisFrame.dispose();
 	    		
+	    		//LOG
+                daoLog.SistemaEncerrado();
+	    		
 	    		// End program
 	    		System.exit(0);
   		    }
